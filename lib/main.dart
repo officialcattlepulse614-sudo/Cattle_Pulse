@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
-import 'package:cattle_pulse/screens/main/main_screen.dart';
-import 'package:cattle_pulse/themes/theme_provider.dart';
 import 'package:cattle_pulse/themes/app_themes.dart';
+import 'package:cattle_pulse/themes/theme_provider.dart';
+import 'package:cattle_pulse/screens/main/main_screen.dart';
 
 void main() {
   runApp(
