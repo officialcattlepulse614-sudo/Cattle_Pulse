@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
 import 'package:cattle_pulse/themes/app_themes.dart';
 import 'package:cattle_pulse/themes/theme_provider.dart';
-import 'package:cattle_pulse/screens/main/main_screen.dart';
+import 'package:cattle_pulse/screens/splash/splash_screen.dart'; // ✅ Added this import
 
 void main() {
   runApp(
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
-      home: const MainScreen(),
+      home: const SplashScreen(), // ✅ Load splash first
     );
   }
 }

@@ -1,40 +1,40 @@
-import 'package:cattle_pulse/controllers/menu_app_controller.dart';
-import 'package:cattle_pulse/responsive.dart';
-import 'package:cattle_pulse/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'components/side_menu.dart';
+import 'package:cattle_pulse/controllers/menu_app_controller.dart';
+import 'package:cattle_pulse/screens/main/components/side_menu.dart';
+import 'package:cattle_pulse/screens/dashboard/dashboard_screen.dart';
+import 'package:cattle_pulse/themes/theme_provider.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  final Widget? child; // 👈 allow dynamic screen loading
+
+  const MainScreen({super.key, this.child});
 
   @override
   Widget build(BuildContext context) {
-    final menuController = context.read<MenuAppController>();
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      key: menuController.scaffoldKey,
+      key: context.read<MenuAppController>().scaffoldKey,
       drawer: const SideMenu(),
-
-      // 👇 Allow swipe to open the drawer even when swiping a bit away from edge
-      drawerEdgeDragWidth: MediaQuery.of(context).size.width * 0.12,
-      // 🔸 12% of the screen width (increase if you want more sensitivity)
-      // Default Flutter value is ~20 pixels only
-
+      backgroundColor:
+          themeProvider.isDarkMode ? const Color(0xFF121212) : Colors.white,
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🌐 Show side menu permanently only on Desktop view
-            if (Responsive.isDesktop(context))
+            // 🖥️ Drawer (always visible on desktop)
+            if (MediaQuery.of(context).size.width > 900)
               const Expanded(
+                flex: 2,
                 child: SideMenu(),
               ),
 
-            // 📱 Main Content Area (Dashboard Screen)
-            const Expanded(
-              flex: 5,
-              child: DashboardScreen(),
+            // 📊 Dynamic content area
+            Expanded(
+              flex: 7,
+              child: child ??
+                  const DashboardScreen(), // 👈 fallback to Dashboard if no child is passed
             ),
           ],
         ),
@@ -42,3 +42,4 @@ class MainScreen extends StatelessWidget {
     );
   }
 }
+
