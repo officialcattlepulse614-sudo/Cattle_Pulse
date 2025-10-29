@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cattle_pulse/screens/auth/login_screen.dart';
-import 'package:cattle_pulse/screens/main/components/side_menu.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
+import 'package:cattle_pulse/screens/settings_screen/settings_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 
 class ProfileMenu extends StatelessWidget {
@@ -25,21 +26,27 @@ class ProfileMenu extends StatelessWidget {
       color: isDark ? const Color(0xFF2B2B2B) : Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       onSelected: (value) {
+        final menuController =
+            Provider.of<MenuAppController>(context, listen: false);
+
         switch (value) {
-          case 0: // 🧍‍♂️ Profile
-            // Use Provider to update the SideMenu’s active section to “Profile”
-            final menuController =
-                Provider.of<MenuAppController>(context, listen: false);
+          case 0:
+            // 👤 Profile option
             menuController.updateMenu("Profile");
             break;
 
-          case 1: // ⚙️ Settings
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Settings coming soon!")),
+          case 1:
+            // ⚙️ Settings option → Open Settings Screen directly
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SettingsScreen(),
+              ),
             );
             break;
 
-          case 2: // 🚪 Logout
+          case 2:
+            // 🚪 Logout option
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -57,7 +64,7 @@ class ProfileMenu extends StatelessWidget {
                   size: 20, color: isDark ? Colors.white70 : Colors.black87),
               const SizedBox(width: 10),
               Text(
-                "Profile",
+                tr('profile'),
                 style: TextStyle(
                   color: isDark ? Colors.white70 : Colors.black87,
                 ),
@@ -73,7 +80,7 @@ class ProfileMenu extends StatelessWidget {
                   size: 20, color: isDark ? Colors.white70 : Colors.black87),
               const SizedBox(width: 10),
               Text(
-                "Settings",
+                tr('settings'),
                 style: TextStyle(
                   color: isDark ? Colors.white70 : Colors.black87,
                 ),
@@ -85,12 +92,12 @@ class ProfileMenu extends StatelessWidget {
         PopupMenuItem<int>(
           value: 2,
           child: Row(
-            children: const [
-              Icon(Icons.logout, size: 20, color: Colors.redAccent),
-              SizedBox(width: 10),
+            children: [
+              const Icon(Icons.logout, size: 20, color: Colors.redAccent),
+              const SizedBox(width: 10),
               Text(
-                "Logout",
-                style: TextStyle(color: Colors.redAccent),
+                tr('logout'),
+                style: const TextStyle(color: Colors.redAccent),
               ),
             ],
           ),

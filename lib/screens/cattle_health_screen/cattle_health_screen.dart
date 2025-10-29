@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CattleHealthScreen extends StatelessWidget {
   const CattleHealthScreen({super.key});
@@ -7,8 +8,9 @@ class CattleHealthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "Cattle Health",
+        tr('cattle_health'),
         style: Theme.of(context).textTheme.headlineMedium,
+        textAlign: TextAlign.center,
       ),
     );
   }

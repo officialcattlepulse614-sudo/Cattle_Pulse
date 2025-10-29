@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cattle_pulse/screens/auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -47,23 +48,23 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 20),
 
-            // 🌿 Tagline
-            const Text(
-              "Every Healthy Pulse Matters",
-              style: TextStyle(
+            // 🌿 Localized Tagline
+            Text(
+              tr('splash_tagline'),
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.white70,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
 
             // ⏳ Loading Indicator
-            const CircularProgressIndicator(
-              color: Colors.white,
-            ),
+            const CircularProgressIndicator(color: Colors.white),
           ],
         ),
       ),
     );
   }
 }
+
