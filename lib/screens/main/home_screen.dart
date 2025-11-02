@@ -1,9 +1,12 @@
+// lib/screens/main/home_screen.dart
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
 import 'package:cattle_pulse/screens/main/components/side_menu.dart';
 import 'package:cattle_pulse/screens/menu_screens/profile_screen/profile_menu.dart';
+import 'package:cattle_pulse/widgets/screen_wrapper.dart';
 
 class HomeScreen extends StatefulWidget {
   final ValueNotifier<ThemeMode> themeNotifier;
@@ -44,9 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
         final isDark = theme.brightness == Brightness.dark;
 
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           backgroundColor:
               isDark ? const Color(0xFF2C2C2C) : const Color(0xFFF8F8F8),
           title: Row(
@@ -56,35 +58,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? const Color(0xFFE29B4B)
                       : const Color(0xFFB87333)),
               const SizedBox(width: 8),
-              Text(
-                'Exit App',
-                style: TextStyle(
-                  color: isDark ? Colors.white : Colors.black87,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text('Exit App',
+                  style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black87,
+                      fontWeight: FontWeight.bold)),
             ],
           ),
           content: Text(
             'Do you want to exit the app?\n(Logout feature will be added later)',
             style: TextStyle(
-              color: isDark ? Colors.white70 : Colors.black87,
-              height: 1.4,
-            ),
+                color: isDark ? Colors.white70 : Colors.black87, height: 1.4),
           ),
           actionsPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           actions: [
             TextButton(
               style: TextButton.styleFrom(
-                foregroundColor:
-                    isDark ? const Color(0xFFE29B4B) : const Color(0xFFB87333),
-              ),
+                  foregroundColor: isDark
+                      ? const Color(0xFFE29B4B)
+                      : const Color(0xFFB87333)),
               onPressed: () => Navigator.pop(context, false),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
+              child: const Text('Cancel',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -92,16 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     isDark ? const Color(0xFFE29B4B) : const Color(0xFFB87333),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                    borderRadius: BorderRadius.circular(10)),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
               ),
               onPressed: () => Navigator.pop(context, true),
-              child: const Text(
-                'Exit',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
+              child: const Text('Exit',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
             ),
           ],
         );
@@ -124,14 +116,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
         final bool showAppBar = !menuController.isProfileScreen;
 
+        // Make system bars transparent so the global gradient shows under them.
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          systemNavigationBarIconBrightness:
+              isDark ? Brightness.light : Brightness.dark,
+        ));
+
         return WillPopScope(
           onWillPop: () => _onWillPop(menuController),
           child: Scaffold(
             key: menuController.scaffoldKey,
             drawer: SideMenu(themeNotifier: widget.themeNotifier),
             drawerEdgeDragWidth: MediaQuery.of(context).size.width * 0.12,
-
-            // ✅ Fixed: Ternary AppBar
             appBar: showAppBar
                 ? PreferredSize(
                     preferredSize: const Size.fromHeight(50),
@@ -163,12 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         leading: Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: IconButton(
-                            icon: Icon(
-                              Icons.menu_rounded,
-                              color: isDark
-                                  ? const Color(0xFFE29B4B)
-                                  : const Color(0xFFB87333),
-                            ),
+                            icon: Icon(Icons.menu_rounded,
+                                color: isDark
+                                    ? const Color(0xFFE29B4B)
+                                    : const Color(0xFFB87333)),
                             onPressed: menuController.controlMenu,
                             tooltip: 'Menu',
                           ),
@@ -178,19 +175,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(
                                 right: 16, top: 8, bottom: 8),
                             child: ProfileMenu(
-                              iconColor: isDark
-                                  ? const Color(0xFFE29B4B)
-                                  : const Color(0xFFB87333),
-                              themeNotifier: widget.themeNotifier,
-                            ),
+                                iconColor: isDark
+                                    ? const Color(0xFFE29B4B)
+                                    : const Color(0xFFB87333),
+                                themeNotifier: widget.themeNotifier),
                           ),
                         ],
                       ),
                     ),
                   )
                 : null,
-
-            body: SafeArea(
+            backgroundColor: Colors.transparent,
+            body: ScreenWrapper(
+              // Default uses global gradient; no backgroundColor override so gradient remains visible
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 switchInCurve: Curves.easeInOut,
@@ -200,9 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     opacity: animation,
                     child: SlideTransition(
                       position: Tween<Offset>(
-                        begin: const Offset(0.02, 0),
-                        end: Offset.zero,
-                      ).animate(animation),
+                              begin: const Offset(0.02, 0), end: Offset.zero)
+                          .animate(animation),
                       child: child,
                     ),
                   );

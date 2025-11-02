@@ -1,5 +1,6 @@
 import 'package:cattle_pulse/screens/splash/splash_screen.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
+import 'package:cattle_pulse/screens/menu_screens/settings_screen/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -21,18 +22,20 @@ class MyApp extends StatelessWidget {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => MenuAppController()),
+            ChangeNotifierProvider(
+                create: (_) => NotificationSettings()), // 👈 FIXED
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Cattle Pulse',
             themeMode: currentMode,
 
-            // ☀️ Light Theme — Creamy Gradient & Glossy
+            // ☀️ Light Theme
             theme: ThemeData(
               useMaterial3: true,
               brightness: Brightness.light,
               primaryColor: const Color(0xFFEAD9B0),
-              scaffoldBackgroundColor: Colors.transparent, // For gradient
+              scaffoldBackgroundColor: Colors.transparent,
               cardColor: Colors.white.withOpacity(0.85),
               colorScheme: const ColorScheme.light(
                 primary: Color(0xFFEAD9B0),
@@ -40,20 +43,15 @@ class MyApp extends StatelessWidget {
                 surface: Color(0xFFFFF8E7),
                 onPrimary: Color(0xFF2E2E2E),
                 onSurface: Color(0xFF2E2E2E),
-                error: Color(0xFFD32F2F),
-                errorContainer: Color(0xFFFFCDD2),
-                primaryContainer: Color(0xFFF0EAE0),
-                tertiaryContainer: Color(0xFFE5F6E3),
               ),
               textTheme: GoogleFonts.poppinsTextTheme().apply(
                 bodyColor: const Color(0xFF2E2E2E),
               ),
               iconTheme: const IconThemeData(color: Color(0xFFB68A4E)),
               appBarTheme: const AppBarTheme(
-                backgroundColor: Color(0xFFF5E8C8),
+                backgroundColor: Color(0xFFEAD9B0),
                 foregroundColor: Color(0xFF2E2E2E),
-                elevation: 4,
-                shadowColor: Color(0x33B68A4E),
+                elevation: 3,
               ),
               drawerTheme: const DrawerThemeData(
                 backgroundColor: Color(0xFFFFF8E7),
@@ -76,7 +74,6 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
               ),
-              // FIX: Changed CardTheme back to CardThemeData and REMOVED 'const'
               cardTheme: CardThemeData(
                 elevation: 5,
                 shadowColor: Colors.black12,
@@ -86,7 +83,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
 
-            // 🌑 Dark Theme — Jet Black Glossy
+            // 🌑 Dark Theme
             darkTheme: ThemeData(
               useMaterial3: true,
               brightness: Brightness.dark,
@@ -99,10 +96,6 @@ class MyApp extends StatelessWidget {
                 surface: Color(0xFF000000),
                 onPrimary: Color(0xFFEAE6E1),
                 onSurface: Color(0xFFEAE6E1),
-                error: Color(0xFFEF5350),
-                errorContainer: Color(0xFF450000),
-                primaryContainer: Color(0xFF1A1A1A),
-                tertiaryContainer: Color(0xFF0A200B),
               ),
               textTheme: GoogleFonts.poppinsTextTheme().apply(
                 bodyColor: const Color(0xFFEAE6E1),
@@ -134,7 +127,6 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
               ),
-              // FIX: Changed CardTheme back to CardThemeData and REMOVED 'const'
               cardTheme: CardThemeData(
                 elevation: 4,
                 shadowColor: Colors.white10,
@@ -144,7 +136,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
 
-            // 🪄 Global gradient background wrapper
+            // 🪄 Gradient background wrapper
             builder: (context, child) {
               final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -170,7 +162,7 @@ class MyApp extends StatelessWidget {
               );
             },
 
-            // 🚀 Start from Splash Screen
+            // 🚀 Entry point
             home: const SplashScreen(),
           ),
         );
