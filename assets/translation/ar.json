@@ -1,0 +1,37 @@
+{
+  "login_screen": {
+    "tagline": "كل نبضة صحية مهمة",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "forgot_password": "هل نسيت كلمة المرور؟",
+    "login": "تسجيل الدخول"
+  },
+
+  "home_screen": {
+    "press_back_again": "اضغط مرة أخرى لتأكيد الخروج",
+    "exit_app_title": "الخروج من التطبيق",
+    "exit_app_message": "هل ترغب في الخروج من التطبيق؟\n(سيتم إضافة ميزة تسجيل الخروج لاحقًا)",
+    "cancel": "إلغاء",
+    "exit": "خروج",
+    "menu": "القائمة",
+    "Dashboard": "لوحة التحكم"
+  },
+
+  "side_menu": {
+    "cattle_pulse": "نبض الماشية",
+    "management_system": "نظام الإدارة",
+    "dashboard": "لوحة التحكم",
+    "cattle_health": "صحة الماشية",
+    "temperature_monitor": "مراقب درجة الحرارة",
+    "diagnosis_treatment": "التشخيص والعلاج",
+    "vaccination_records": "التطعيم والسجلات",
+    "cattle_feeding": "تغذية الماشية",
+    "feeding_schedule": "جدول التغذية",
+    "auto_feeder": "المغذي التلقائي",
+    "inventory": "المخزون",
+    "geo_fencing": "الحدود الجغرافية",
+    "reports": "التقارير",
+    "settings": "الإعدادات",
+    "theme_mode": "وضع السمة"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "login_screen": {
+    "tagline": "Cada pulso saludable importa",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "login": "Iniciar sesión"
+  },
+
+  "home_screen": {
+    "press_back_again": "Presiona de nuevo para confirmar la salida",
+    "exit_app_title": "Salir de la aplicación",
+    "exit_app_message": "¿Quieres salir de la aplicación?\n(La función de cierre de sesión se agregará más tarde)",
+    "cancel": "Cancelar",
+    "exit": "Salir",
+    "menu": "Menú",
+    "Dashboard": "Panel de control"
+  },
+
+  "side_menu": {
+    "cattle_pulse": "Pulso del ganado",
+    "management_system": "Sistema de gestión",
+    "dashboard": "Panel de control",
+    "cattle_health": "Salud del ganado",
+    "temperature_monitor": "Monitor de temperatura",
+    "diagnosis_treatment": "Diagnóstico y tratamiento",
+    "vaccination_records": "Vacunación y registros",
+    "cattle_feeding": "Alimentación del ganado",
+    "feeding_schedule": "Horario de alimentación",
+    "auto_feeder": "Alimentador automático",
+    "inventory": "Inventario",
+    "geo_fencing": "Geocercas",
+    "reports": "Informes",
+    "settings": "Configuración",
+    "theme_mode": "Modo de tema"
+  }
+}

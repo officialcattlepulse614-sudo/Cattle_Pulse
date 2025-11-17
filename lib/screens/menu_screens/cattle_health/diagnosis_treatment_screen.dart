@@ -1,5 +1,32 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+class FilterColorConfig {
+  // Selected Tile Colors
+  static const Color tile_selected_background_dark = Color(0xFF2A2521);
+  static const Color tile_selected_background_light =
+      Color.fromARGB(255, 218, 204, 183);
+  static const Color tile_unselected_background_dark = Color(0xFF36302B);
+  static const Color tile_unselected_background_light =
+      Color.fromARGB(255, 247, 233, 210);
+
+  // Button Colors
+  static const Color button_active_background_dark = Color(0xFFB87333);
+  static const Color button_active_background_light = Color(0xFFE29B4B);
+  static const Color button_inactive_background_dark = Color(0xFF36302B);
+  static const Color button_inactive_background_light = Color(0xFFE6DAC6);
+
+  // Chip Colors
+  static const Color chip_vet_required = Colors.redAccent;
+  static const Color chip_on_site = Colors.green;
+  static const Color chip_all = Colors.green;
+
+  static Color getChipColorByFilter(String filterName) {
+    if (filterName == 'Vet Required') return chip_vet_required;
+    if (filterName == 'On-site') return chip_on_site;
+    return chip_all;
+  }
+}
 
 class LocalDiagnosisTestApp extends StatelessWidget {
   const LocalDiagnosisTestApp({super.key});
@@ -9,50 +36,32 @@ class LocalDiagnosisTestApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Farm Health Guide',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: const Color(0xFF4CAF50),
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFF9FAFB),
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(fontWeight: FontWeight.w600),
-          bodyMedium: TextStyle(fontSize: 15, height: 1.4),
-        ),
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF4CAF50),
-          brightness: Brightness.dark,
-        ),
-        scaffoldBackgroundColor: const Color(0xFF121212),
-        cardColor: const Color(0xFF1E1E1E),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.white70),
-          titleMedium: TextStyle(color: Colors.white),
-        ),
-      ),
+      theme: _buildTheme(Brightness.light),
+      darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
       home: const DiagnosisTreatmentScreen(),
     );
   }
+
+  ThemeData _buildTheme(Brightness brightness) {
+    final isDark = brightness == Brightness.dark;
+    return ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: const Color(0xFF4CAF50),
+      brightness: brightness,
+      scaffoldBackgroundColor:
+          isDark ? const Color(0xFF121212) : const Color(0xFFF9FAFB),
+      cardColor: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+    );
+  }
 }
 
-class _DiseaseItem {
-  final String name;
-  final String short;
-  final String symptoms;
-  final String treatmentAtFarm;
+class Disease {
+  final String name, short, symptoms, treatment, precautions;
   final bool vetRequired;
-  final String precautions;
 
-  const _DiseaseItem({
-    required this.name,
-    required this.short,
-    required this.symptoms,
-    required this.treatmentAtFarm,
-    required this.vetRequired,
-    required this.precautions,
-  });
+  const Disease(this.name, this.short, this.symptoms, this.treatment,
+      this.precautions, this.vetRequired);
 }
 
 class DiagnosisTreatmentScreen extends StatefulWidget {
@@ -64,314 +73,588 @@ class DiagnosisTreatmentScreen extends StatefulWidget {
 }
 
 class _DiagnosisTreatmentScreenState extends State<DiagnosisTreatmentScreen>
-    with TickerProviderStateMixin {
-  final TextEditingController _searchCtrl = TextEditingController();
-  String _query = '';
-  String _filter = 'All';
-  late AnimationController _listAnimController;
+    with SingleTickerProviderStateMixin {
+  final _searchCtrl = TextEditingController();
+  String _query = '', _filter = 'All';
+  late AnimationController _animCtrl;
 
-  final List<_DiseaseItem> _allDiseases = const [
-    _DiseaseItem(
-      name: 'Mastitis',
-      short: 'Udder infection — common after calving',
-      symptoms: 'Swollen/hot udder, abnormal milk, fever, reduced yield',
-      treatmentAtFarm:
-          'Clean udder, frequent milking, apply warm compresses, consult vet for antibiotics.',
-      vetRequired: true,
-      precautions:
-          'Maintain clean housing, proper milking hygiene, isolate affected animals.',
-    ),
-    _DiseaseItem(
-      name: 'Foot-and-Mouth Disease (FMD)',
-      short: 'Highly contagious viral disease',
-      symptoms:
-          'Fever, blisters on mouth/feet/teats, salivation, lameness, sudden drop in milk',
-      treatmentAtFarm:
-          'Isolate affected animals, supportive care (fluids, soft food), strict biosecurity.',
-      vetRequired: true,
-      precautions:
-          'Control movement, disinfect pens, report to local animal health authorities.',
-    ),
-    _DiseaseItem(
-      name: 'Bloat (Ruminal tympany)',
-      short: 'Gas accumulation in rumen — can be life threatening',
-      symptoms: 'Swelling on left flank, discomfort, difficulty breathing',
-      treatmentAtFarm:
-          'Move animal to stand, pass an ororuminal tube if trained, give anti-foaming agents (poloxalene).',
-      vetRequired: true,
-      precautions:
-          'Avoid sudden diet changes, limit access to lush legumes, feed slowly.',
-    ),
-    _DiseaseItem(
-      name: 'Lumpy Skin Disease (LSD)',
-      short: 'Viral disease causing skin nodules',
-      symptoms:
-          'Skin lumps, fever, decreased appetite, decreased milk, sometimes eye/nasal discharge',
-      treatmentAtFarm:
-          'Supportive care, isolate affected animals, control insect vectors, contact vet for specific care.',
-      vetRequired: true,
-      precautions:
-          'Vector control, vaccination where available, isolate and report outbreaks.',
-    ),
-    _DiseaseItem(
-      name: 'Parasitic Infestation (Ticks / Internal worms)',
-      short: 'External and internal parasites affecting general health',
-      symptoms:
-          'Poor condition, anemia, itching (ticks), diarrhoea/weight loss (worms)',
-      treatmentAtFarm:
-          'Regular deworming schedule, topical tick control, maintain clean environment.',
-      vetRequired: false,
-      precautions:
-          'Follow recommended deworming programs, pasture rotation, tick control measures.',
-    ),
-    _DiseaseItem(
-      name: 'Brucellosis',
-      short: 'Bacterial disease affecting reproduction',
-      symptoms: 'Abortions, retained placenta, reduced fertility',
-      treatmentAtFarm:
-          'Not treatable on farm; infected animals often need veterinary assessment and herd testing.',
-      vetRequired: true,
-      precautions:
-          'Practice safe handling, test-and-slaughter policies may apply, maintain biosecurity.',
-    ),
+  static const _diseases = [
+    Disease(
+        'Mastitis',
+        'Udder infection — common after calving',
+        'Swollen/hot udder, abnormal milk, fever, reduced yield',
+        'Clean udder, frequent milking, apply warm compresses, consult vet for antibiotics.',
+        'Maintain clean housing, proper milking hygiene, isolate affected animals.',
+        true),
+    Disease(
+        'Foot-and-Mouth Disease (FMD)',
+        'Highly contagious viral disease',
+        'Fever, blisters on mouth/feet/teats, salivation, lameness, sudden drop in milk',
+        'Isolate affected animals, supportive care (fluids, soft food), strict biosecurity.',
+        'Control movement, disinfect pens, report to local animal health authorities.',
+        true),
+    Disease(
+        'Bloat (Ruminal tympany)',
+        'Gas accumulation in rumen — can be life threatening',
+        'Swelling on left flank, discomfort, difficulty breathing',
+        'Move animal to stand, pass an ororuminal tube if trained, give anti-foaming agents.',
+        'Avoid sudden diet changes, limit access to lush legumes, feed slowly.',
+        true),
+    Disease(
+        'Lumpy Skin Disease (LSD)',
+        'Viral disease causing skin nodules',
+        'Skin lumps, fever, decreased appetite, decreased milk, eye/nasal discharge',
+        'Supportive care, isolate affected animals, insect control.',
+        'Vector control, vaccination where available, isolate and report outbreaks.',
+        true),
+    Disease(
+        'Parasitic Infestation (Ticks / Internal worms)',
+        'Parasites affecting overall health',
+        'Poor condition, anemia, itching (ticks), diarrhoea/weight loss (worms)',
+        'Regular deworming, topical tick control, maintain clean environment.',
+        'Pasture rotation, tick control measures.',
+        false),
+    Disease(
+        'Brucellosis',
+        'Bacterial disease affecting reproduction',
+        'Abortions, retained placenta, reduced fertility',
+        'Not treatable; requires veterinary assessment & herd testing.',
+        'Safe handling, test animals, biosecurity.',
+        true),
   ];
 
-  late List<_DiseaseItem> _filtered;
+  List<Disease> get _filtered {
+    final q = _query.toLowerCase();
+    return _diseases.where((d) {
+      final matchSearch = q.isEmpty ||
+          d.name.toLowerCase().contains(q) ||
+          d.short.toLowerCase().contains(q) ||
+          d.symptoms.toLowerCase().contains(q);
+      final matchFilter = _filter == 'All' ||
+          (_filter == 'Vet Required' ? d.vetRequired : !d.vetRequired);
+      return matchSearch && matchFilter;
+    }).toList();
+  }
 
   @override
   void initState() {
     super.initState();
-    _filtered = _allDiseases;
-    _searchCtrl.addListener(_updateSearchQuery);
-    _listAnimController = AnimationController(
+    _searchCtrl.addListener(() => setState(() {
+          _query = _searchCtrl.text.trim();
+          _animCtrl.forward(from: 0);
+        }));
+    _animCtrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500))
       ..forward();
   }
 
-  void _updateSearchQuery() {
-    setState(() {
-      _query = _searchCtrl.text.trim();
-      _filterDiseases();
-      _listAnimController.forward(from: 0.0);
-    });
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    _animCtrl.dispose();
+    super.dispose();
   }
 
-  void _filterDiseases() {
-    final q = _query.toLowerCase();
-    _filtered = _allDiseases.where((d) {
-      final matchesSearch = q.isEmpty ||
-          d.name.toLowerCase().contains(q) ||
-          d.short.toLowerCase().contains(q) ||
-          d.symptoms.toLowerCase().contains(q);
-      final matchesFilter = _filter == 'All'
-          ? true
-          : _filter == 'Vet Required'
-              ? d.vetRequired
-              : !d.vetRequired;
-      return matchesSearch && matchesFilter;
-    }).toList();
+  Widget _buildFilterOption(String label, IconData icon, Color bgColor,
+      Color iconColor, Color textColor) {
+    final bool isSelected = _filter == label;
+    final Color tileBgColor = isSelected
+        ? (Theme.of(context).brightness == Brightness.dark
+            ? FilterColorConfig.tile_selected_background_dark
+            : FilterColorConfig.tile_selected_background_light)
+        : (Theme.of(context).brightness == Brightness.dark
+            ? FilterColorConfig.tile_unselected_background_dark
+            : FilterColorConfig.tile_unselected_background_light);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+          color: tileBgColor, borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        leading: Icon(icon, color: iconColor),
+        title: Text(label,
+            style: TextStyle(
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: textColor)),
+        trailing:
+            isSelected ? Icon(Icons.check_circle, color: iconColor) : null,
+        onTap: () {
+          HapticFeedback.selectionClick();
+          Navigator.pop(context);
+          setState(() {
+            _filter = label;
+            _animCtrl.forward(from: 0);
+          });
+        },
+      ),
+    );
   }
 
-  void _openDetails(_DiseaseItem disease) {
-    final cs = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final iconColor = isDark ? Colors.tealAccent.shade200 : cs.primary;
+  Widget _buildFilterButton(Color bgColor, Color iconColor) {
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+        child: InkWell(
+          onTap: _showFilter,
+          borderRadius: BorderRadius.circular(30),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            child: Icon(Icons.tune_rounded, color: iconColor, size: 24),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActiveFilterChip() {
+    final Color mainChipColor = FilterColorConfig.getChipColorByFilter(_filter);
+    final Color chipBgColor = mainChipColor.withOpacity(0.1);
+    final Color chipBorderColor = mainChipColor.withOpacity(0.3);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+          color: chipBgColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: chipBorderColor)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.filter_alt, size: 14, color: mainChipColor),
+          const SizedBox(width: 4),
+          Text('Filter: $_filter',
+              style: TextStyle(
+                  color: mainChipColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600)),
+          const SizedBox(width: 4),
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              setState(() {
+                _filter = 'All';
+                _animCtrl.forward(from: 0);
+              });
+            },
+            child: Icon(Icons.close, size: 17, color: mainChipColor),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showFilter() {
+    HapticFeedback.lightImpact();
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color bgColor =
+        isDark ? const Color(0xFF1F1B18) : const Color(0xFFE6DAC6);
+    final Color iconColor =
+        isDark ? const Color(0xFFE29B4B) : const Color(0xFFB87333);
+    final Color textColor =
+        isDark ? const Color(0xFFF5E6C8) : const Color(0xFF3B2E1A);
 
     showModalBottomSheet(
       context: context,
-      useSafeArea: true,
-      backgroundColor: cs.surface,
-      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      backgroundColor: bgColor,
+      builder: (ctx) => SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0x9DE29C4B)
+                            : const Color(0x9BB87333),
+                        borderRadius: BorderRadius.circular(40)),
+                    child: Icon(Icons.tune_rounded, size: 26, color: bgColor),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('Filter Options',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(
+                              fontWeight: FontWeight.bold, color: textColor)),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _buildFilterOption(
+                  'All', Icons.list_rounded, bgColor, iconColor, textColor),
+              _buildFilterOption('Vet Required', Icons.local_hospital_rounded,
+                  bgColor, iconColor, textColor),
+              _buildFilterOption('On-site', Icons.home_repair_service_rounded,
+                  bgColor, iconColor, textColor),
+            ],
+          ),
+        ),
       ),
-      builder: (ctx) => DraggableScrollableSheet(
+    );
+  }
+
+  void _showDetails(Disease d) {
+    HapticFeedback.lightImpact();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color bgColor =
+        isDark ? const Color(0xFF1F1B18) : const Color(0xFFE6DAC6);
+    final Color iconColor =
+        isDark ? const Color(0xFFFFB74D) : const Color(0xFFEF6C00);
+    final Color textColor =
+        isDark ? const Color(0xFFF5E6C8) : const Color(0xFF836232);
+    final Color text2Color =
+        isDark ? const Color(0xFFFFBA6A) : const Color(0xFF836232);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: bgColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+      builder: (_) => DraggableScrollableSheet(
         expand: false,
-        initialChildSize: 0.85,
-        builder: (_, controller) => ListView(
-          controller: controller,
+        initialChildSize: 0.9,
+        builder: (ctx, ctrl) => ListView(
+          controller: ctrl,
           padding: const EdgeInsets.all(24),
           children: [
-            Text(
-              disease.name,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(disease.short, style: Theme.of(context).textTheme.titleMedium),
+            Center(
+                child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFFE29B4B)
+                            : const Color(0xFFB87333),
+                        borderRadius: BorderRadius.circular(2)))),
+            Text(d.name,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: isDark
+                        ? const Color(0xFFF5E6C8)
+                        : const Color(0xFF3B2E1A))),
+            const SizedBox(height: 10),
+            Text(d.short,
+                style: TextStyle(
+                    color: isDark
+                        ? const Color(0xFFFFBA6A)
+                        : const Color(0xFF836232),
+                    fontSize: 16)),
             const SizedBox(height: 24),
-            _detailSection('Symptoms', disease.symptoms, Icons.sick, iconColor),
-            _detailSection('Farm Treatment Plan', disease.treatmentAtFarm,
-                Icons.healing_rounded, iconColor),
-            _detailSection('Prevention & Biosecurity', disease.precautions,
-                Icons.security_rounded, iconColor),
-            const SizedBox(height: 24),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Chip(
-                label: Text(
-                  disease.vetRequired
-                      ? 'Vet Required'
-                      : 'Farm Curable (On-site)',
-                  style: const TextStyle(color: Colors.white),
-                ),
-                backgroundColor:
-                    disease.vetRequired ? Colors.redAccent : Colors.green,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              ),
-            ),
+            _detailSection('Symptoms', d.symptoms, Icons.sick, iconColor,
+                textColor, text2Color),
+            _detailSection('Farm Treatment Plan', d.treatment,
+                Icons.healing_rounded, iconColor, textColor, text2Color),
+            _detailSection('Prevention & Biosecurity', d.precautions,
+                Icons.security_rounded, iconColor, textColor, text2Color),
+            const SizedBox(height: 20),
+            _badge(d.vetRequired),
           ],
         ),
       ),
     );
   }
 
-  Widget _detailSection(
-      String title, String text, IconData icon, Color iconColor) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(children: [
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: iconColor.withOpacity(0.15),
-              child: Icon(icon, size: 20, color: iconColor),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: iconColor,
+  Widget _detailSection(String title, String text, IconData icon,
+          Color iconColor, Color textColor, Color text2Color) =>
+      Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: iconColor.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Icon(icon, size: 22, color: iconColor)),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: Text(title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 17,
+                          color: textColor))),
+            ]),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 15,
+                  height: 1.5,
+                  color: text2Color,
+                ),
               ),
             ),
-          ]),
-          const SizedBox(height: 8),
-          Text(text, style: const TextStyle(fontSize: 15, height: 1.4)),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
+
+  Widget _badge(bool vetRequired) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+        decoration: BoxDecoration(
+          color: vetRequired ? Colors.redAccent : Colors.green,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+                color: (vetRequired ? Colors.redAccent : Colors.green)
+                    .withOpacity(0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 4))
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(vetRequired ? Icons.local_hospital : Icons.check_circle,
+                color: Colors.white, size: 20),
+            const SizedBox(width: 8),
+            Text(vetRequired ? 'Veterinary Care Required' : 'Farm Manageable',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15)),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final diseases = _filtered;
+
+    // Theme variables
+    final Color bgColor =
+        isDark ? const Color(0xFF1F1B18) : const Color(0xFFE6DAC6);
+    final Color iconColor =
+        isDark ? const Color(0xFFE29B4B) : const Color(0xFFB87333);
+    final Color textColor =
+        isDark ? const Color(0xFFF5E6C8) : const Color(0xFF3B2E1A);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 40),
+      body: SafeArea(
         child: Column(
           children: [
-            SearchBar(
-              controller: _searchCtrl,
-              hintText: 'Search disease or symptom...',
-              leading: const Icon(Icons.search),
-              padding: const WidgetStatePropertyAll<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 16),
-              ),
-            ),
-            const SizedBox(height: 16),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'All', label: Text('All')),
-                ButtonSegment(value: 'Vet Required', label: Text('Vet')),
-                ButtonSegment(value: 'On-site', label: Text('On-site')),
-              ],
-              selected: {_filter},
-              onSelectionChanged: (s) {
-                setState(() {
-                  _filter = s.first;
-                  _filterDiseases();
-                  _listAnimController.forward(from: 0.0);
-                });
-              },
-              style: SegmentedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                backgroundColor:
-                    isDark ? const Color(0xFF1E1E1E) : Colors.grey.shade100,
-                selectedBackgroundColor: isDark
-                    ? Colors.tealAccent.withOpacity(0.25)
-                    : cs.primaryContainer.withOpacity(0.4),
-                selectedForegroundColor:
-                    isDark ? Colors.tealAccent.shade200 : cs.primary,
-                foregroundColor: isDark ? Colors.white70 : Colors.grey.shade800,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _filtered.length,
-                itemBuilder: (context, index) {
-                  final d = _filtered[index];
-                  return FadeTransition(
-                    opacity: Tween(begin: 0.0, end: 1.0).animate(
-                      CurvedAnimation(
-                        parent: _listAnimController,
-                        curve: Interval(index * 0.1, 1.0, curve: Curves.easeIn),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+              child: Column(
+                children: [
+                  Row(children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: bgColor,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                              color: bgColor.withOpacity(0.25),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4))
+                        ],
+                      ),
+                      child: Icon(Icons.favorite_border,
+                          color: iconColor, size: 24),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Farm Health Guide',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: -0.5,
+                                      color: textColor)),
+                          Text('${diseases.length} diseases available',
+                              style: TextStyle(
+                                  color: isDark
+                                      ? const Color(0xB5F5E6C8)
+                                      : const Color(0xB33B2E1A),
+                                  fontSize: 13)),
+                        ],
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  ]),
+                  const SizedBox(height: 20),
+                  Row(children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: bgColor,
+                            borderRadius: BorderRadius.circular(30)),
+                        child: TextField(
+                          controller: _searchCtrl,
+                          style: TextStyle(
+                              color: isDark
+                                  ? const Color(0xFFE6DAC6)
+                                  : Colors.black87),
+                          decoration: InputDecoration(
+                            hintText: 'Search diseases, symptoms...',
+                            hintStyle: TextStyle(color: textColor),
+                            prefixIcon:
+                                Icon(Icons.search_rounded, color: iconColor),
+                            suffixIcon: _query.isNotEmpty
+                                ? IconButton(
+                                    icon: Icon(Icons.clear_rounded,
+                                        color: iconColor),
+                                    onPressed: () {
+                                      HapticFeedback.lightImpact();
+                                      _searchCtrl.clear();
+                                    })
+                                : null,
+                            filled: false,
+                            border: InputBorder.none,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(30)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(30)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    _buildFilterButton(bgColor, iconColor),
+                  ]),
+                  if (_filter != 'All') ...[
+                    const SizedBox(height: 12),
+                    _buildActiveFilterChip(),
+                  ],
+                ],
+              ),
+            ),
+            Expanded(
+              child: diseases.isEmpty
+                  ? Center(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Icon(Icons.search_off_rounded,
+                              size: 64,
+                              color: isDark
+                                  ? const Color.fromARGB(164, 226, 156, 75)
+                                  : const Color.fromARGB(172, 184, 115, 51)),
+                          const SizedBox(height: 16),
+                          Text('No diseases found',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: textColor)),
+                          const SizedBox(height: 8),
+                          Text('Try adjusting your search or filter',
+                              style: TextStyle(fontSize: 14, color: textColor)),
+                        ]))
+                  : ListView.builder(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                      itemCount: diseases.length,
+                      itemBuilder: (_, i) => FadeTransition(
+                        opacity: Tween(begin: 0.0, end: 1.0).animate(
+                            CurvedAnimation(
+                                parent: _animCtrl,
+                                curve: Interval((i * 0.06).clamp(0.0, 1.0), 1.0,
+                                    curve: Curves.easeOut))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
                           child: Material(
-                            color: cs.surface.withOpacity(0.9),
-                            elevation: 2,
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.all(16),
-                              leading: CircleAvatar(
-                                radius: 26,
-                                backgroundColor: d.vetRequired
-                                    ? Colors.redAccent.withOpacity(0.15)
-                                    : Colors.green.withOpacity(0.15),
-                                child: Icon(
-                                  d.vetRequired
-                                      ? Icons.local_hospital_rounded
-                                      : Icons.healing_rounded,
-                                  color: d.vetRequired
-                                      ? Colors.redAccent
-                                      : Colors.green,
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => _showDetails(diseases[i]),
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: bgColor,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: bgColor),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: isDark
+                                            ? Colors.black.withOpacity(0.35)
+                                            : Colors.black.withOpacity(0.04),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 2))
+                                  ],
                                 ),
-                              ),
-                              title: Text(
-                                d.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 6.0),
-                                child: Text(
-                                  d.short,
-                                  style: TextStyle(
-                                    color: isDark
-                                        ? Colors.white70
-                                        : Colors.black87,
+                                padding: const EdgeInsets.all(16),
+                                child: Row(children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                        color: diseases[i].vetRequired
+                                            ? Colors.redAccent.withOpacity(0.12)
+                                            : Colors.green.withOpacity(0.12),
+                                        borderRadius:
+                                            BorderRadius.circular(14)),
+                                    child: Icon(
+                                        diseases[i].vetRequired
+                                            ? Icons.local_hospital_rounded
+                                            : Icons.healing_rounded,
+                                        color: diseases[i].vetRequired
+                                            ? Colors.redAccent
+                                            : Colors.green,
+                                        size: 24),
                                   ),
-                                ),
+                                  const SizedBox(width: 14),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(diseases[i].name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: textColor)),
+                                        const SizedBox(height: 4),
+                                        Text(diseases[i].short,
+                                            style: TextStyle(
+                                                color: isDark
+                                                    ? const Color.fromARGB(
+                                                        190, 245, 230, 200)
+                                                    : const Color.fromARGB(
+                                                        153, 59, 46, 26),
+                                                fontSize: 13),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis),
+                                      ],
+                                    ),
+                                  ),
+                                  Icon(Icons.arrow_forward_ios_rounded,
+                                      size: 16,
+                                      color: isDark
+                                          ? Colors.white38
+                                          : Colors.black26),
+                                ]),
                               ),
-                              onTap: () => _openDetails(d),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),

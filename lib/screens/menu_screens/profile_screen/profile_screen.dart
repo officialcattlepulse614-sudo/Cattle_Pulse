@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
 import 'package:cattle_pulse/screens/auth/login_screen.dart';
 import 'package:cattle_pulse/screens/menu_screens/profile_screen/edit_profile.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/settings_screen.dart';
 import 'package:cattle_pulse/screens/menu_screens/settings_screen/privacy_security_screen.dart';
 import 'package:cattle_pulse/screens/menu_screens/settings_screen/about_app_screen.dart';
 
@@ -45,56 +44,49 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
 
-          // Custom Curved AppBar
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: appBarColor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25),
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: isDark
-                            ? const Color(0xFFE29B4B)
-                            : const Color(0xFFB87333),
+          // Floating custom top bar
+          Positioned(
+            top: 6,
+            left: 6,
+            right: 6,
+            child: Material(
+              elevation: 8,
+              shadowColor: Colors.black26,
+              borderRadius: BorderRadius.circular(20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  height: 50,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(color: appBarColor),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: isDark
+                              ? const Color(0xFFE29B4B)
+                              : const Color(0xFFB87333),
+                        ),
+                        onPressed: () {
+                          controller.selectMenu("Dashboard");
+                        },
                       ),
-                      onPressed: () {
-                        controller.selectMenu("Dashboard");
-                      },
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Profile",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 22,
-                        letterSpacing: 0.8,
-                        color: isDark
-                            ? const Color(0xFFF5E6C8)
-                            : const Color(0xFF3B2E1A),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Profile",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 22,
+                          letterSpacing: 0.8,
+                          color: isDark
+                              ? const Color(0xFFF5E6C8)
+                              : const Color(0xFF3B2E1A),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -154,23 +146,19 @@ class ProfileScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const EditProfileScreen()),
+                              builder: (context) => const EditProfileScreen(),
+                            ),
                           );
                         },
                       ),
                       const SizedBox(height: 40),
+
+                      // ---------- Options ----------
                       _buildProfileOption(
                         icon: Icons.settings,
                         text: "Settings",
                         isDark: isDark,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SettingsScreen()),
-                          );
-                        },
+                        onTap: () => controller.selectMenu("Settings"),
                       ),
                       _buildProfileOption(
                         icon: Icons.lock,
@@ -180,8 +168,9 @@ class ProfileScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const PrivacySecurityScreen()),
+                              builder: (context) =>
+                                  const PrivacySecurityScreen(),
+                            ),
                           );
                         },
                       ),
@@ -193,10 +182,12 @@ class ProfileScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AboutAppScreen()),
+                              builder: (context) => const AboutAppScreen(),
+                            ),
                           );
                         },
                       ),
+
                       const SizedBox(height: 50),
                       ElevatedButton.icon(
                         icon: const Icon(Icons.logout),
@@ -259,8 +250,11 @@ class ProfileScreen extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        trailing: Icon(Icons.arrow_forward_ios,
-            size: 16, color: isDark ? Colors.white54 : Colors.grey[600]),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: isDark ? Colors.white54 : Colors.grey[600],
+        ),
         onTap: onTap,
       ),
     );

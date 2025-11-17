@@ -11,8 +11,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  flutter_localizations:
+    sdk: flutter
+  easy_localization: ^3.0.1 # latest version
+    
+  #Firebase Related Dependecies  
+  firebase_core: ^4.2.1 #Connection with firebase
+  cloud_firestore: ^6.1.0 #for firestore data
+  firebase_auth: ^6.1.2 #For authentication
 
-  # Common Flutter packages
+  # Common Flutter Packages
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10
@@ -22,6 +31,7 @@ dependencies:
   shared_preferences: ^2.1.0
   package_info_plus: ^9.0.0
   image_picker: ^1.2.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +43,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/translation/
 
   # ✅ Correct place for custom fonts
   fonts:

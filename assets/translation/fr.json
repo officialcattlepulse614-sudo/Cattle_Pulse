@@ -1,0 +1,37 @@
+{
+  "login_screen": {
+    "tagline": "ہر صحت مند دھڑکن اہم ہے",
+    "username": "صارف نام",
+    "password": "پاس ورڈ",
+    "forgot_password": "پاس ورڈ بھول گئے؟",
+    "login": "لاگ ان"
+  },
+
+  "home_screen": {
+    "press_back_again": "باہر نکلنے کی تصدیق کے لیے دوبارہ دبائیں",
+    "exit_app_title": "ایپ سے باہر نکلیں",
+    "exit_app_message": "کیا آپ ایپ سے باہر نکلنا چاہتے ہیں؟\n(لاگ آؤٹ فیچر بعد میں شامل کیا جائے گا)",
+    "cancel": "منسوخ کریں",
+    "exit": "باہر نکلیں",
+    "menu": "مینو",
+    "Dashboard": "ڈیش بورڈ"
+  },
+
+  "side_menu": {
+    "cattle_pulse": "مویشیوں کی نبض",
+    "management_system": "انتظامی نظام",
+    "dashboard": "ڈیش بورڈ",
+    "cattle_health": "مویشیوں کی صحت",
+    "temperature_monitor": "درجہ حرارت مانیٹر",
+    "diagnosis_treatment": "تشخیص اور علاج",
+    "vaccination_records": "ٹیکہ کاری اور ریکارڈ",
+    "cattle_feeding": "مویشیوں کی خوراک",
+    "feeding_schedule": "خوراک کا شیڈول",
+    "auto_feeder": "خودکار فیڈر",
+    "inventory": "فہرست",
+    "geo_fencing": "جغرافیائی حد بندی",
+    "reports": "رپورٹس",
+    "settings": "ترتیبات",
+    "theme_mode": "تھیم موڈ"
+  }
+}

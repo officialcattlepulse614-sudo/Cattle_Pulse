@@ -1,14 +1,25 @@
-// lib/screens/menu_screens/settings_screen/about_app_screen.dart
+// lib/screens/menu_screens/settings_screen/language_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-class AboutAppScreen extends StatelessWidget {
-  const AboutAppScreen({super.key});
+class LanguageScreen extends StatelessWidget {
+  const LanguageScreen({super.key});
+
+  // List of supported languages
+  final List<Map<String, dynamic>> languages = const [
+    {'name': 'English', 'locale': Locale('en')},
+    {'name': 'Urdu', 'locale': Locale('ur')},
+    {'name': 'Arabic', 'locale': Locale('ar')},
+    {'name': 'Spanish', 'locale': Locale('es')},
+    {'name': 'French', 'locale': Locale('fr')},
+  ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final currentLocale = context.locale;
 
     // Transparent system bars
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -51,7 +62,7 @@ class AboutAppScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'About App',
+                          'Language'.tr(),
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -77,27 +88,49 @@ class AboutAppScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 16),
                     Text(
-                      'CattlePulse',
-                      style: theme.textTheme.headlineSmall?.copyWith(
+                      'Select Preferred Language'.tr(),
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: isDark
                             ? const Color(0xFFF5E6C8)
                             : const Color(0xFF3B2E1A),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Version 1.0.0\n\nCattlePulse is a smart livestock monitoring system designed to help farmers track health, temperature, humidity, and real-time statistics of their cattle.',
-                      style: theme.textTheme.bodyMedium,
-                    ),
                     const SizedBox(height: 20),
-                    Text(
-                      'Developed by:\nTech Guy & Team',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: isDark ? Colors.white70 : Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+
+                    // Language list
+                    ...languages.map(
+                      (lang) => Card(
+                        color: isDark
+                            ? (currentLocale == lang['locale']
+                                ? const Color(0xFFE29B4B).withOpacity(0.2)
+                                : const Color(0xFF1E1E1E))
+                            : (currentLocale == lang['locale']
+                                ? const Color(0xFFB87333).withOpacity(0.2)
+                                : const Color.fromARGB(255, 248, 234, 220)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            lang['name'],
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF3B2E1A),
+                            ),
+                          ),
+                          trailing: currentLocale == lang['locale']
+                              ? Icon(Icons.check,
+                                  color: isDark
+                                      ? const Color(0xFFE29B4B)
+                                      : const Color(0xFFB87333))
+                              : null,
+                          onTap: () {
+                            context.setLocale(lang['locale']);
+                          },
+                        ),
                       ),
                     ),
                   ],

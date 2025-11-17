@@ -7,6 +7,7 @@ import 'package:cattle_pulse/controllers/menu_app_controller.dart';
 import 'package:cattle_pulse/screens/main/components/side_menu.dart';
 import 'package:cattle_pulse/screens/menu_screens/profile_screen/profile_menu.dart';
 import 'package:cattle_pulse/widgets/screen_wrapper.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeScreen extends StatefulWidget {
   final ValueNotifier<ThemeMode> themeNotifier;
@@ -31,9 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
         now.difference(lastPressed!) > const Duration(seconds: 2)) {
       lastPressed = now;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Press back again to confirm exit'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text('home_screen.press_back_again'.tr()),
+          duration: const Duration(seconds: 2),
         ),
       );
       return false;
@@ -58,28 +59,35 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? const Color(0xFFE29B4B)
                       : const Color(0xFFB87333)),
               const SizedBox(width: 8),
-              Text('Exit App',
-                  style: TextStyle(
-                      color: isDark ? Colors.white : Colors.black87,
-                      fontWeight: FontWeight.bold)),
+              Text(
+                'home_screen.exit_app'.tr(),
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           content: Text(
-            'Do you want to exit the app?\n(Logout feature will be added later)',
+            'home_screen.exit_app_message'.tr(),
             style: TextStyle(
-                color: isDark ? Colors.white70 : Colors.black87, height: 1.4),
+              color: isDark ? Colors.white70 : Colors.black87,
+              height: 1.4,
+            ),
           ),
           actionsPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           actions: [
             TextButton(
               style: TextButton.styleFrom(
-                  foregroundColor: isDark
-                      ? const Color(0xFFE29B4B)
-                      : const Color(0xFFB87333)),
+                foregroundColor:
+                    isDark ? const Color(0xFFE29B4B) : const Color(0xFFB87333),
+              ),
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -92,8 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
               ),
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Exit',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              child: const Text(
+                'Exit',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
             ),
           ],
         );
@@ -116,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         final bool showAppBar = !menuController.isProfileScreen;
 
-        // Make system bars transparent so the global gradient shows under them.
+        // Transparent system bars
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           systemNavigationBarColor: Colors.transparent,
@@ -131,63 +141,80 @@ class _HomeScreenState extends State<HomeScreen> {
             key: menuController.scaffoldKey,
             drawer: SideMenu(themeNotifier: widget.themeNotifier),
             drawerEdgeDragWidth: MediaQuery.of(context).size.width * 0.12,
+
+            // ----------------------------------------------------------
+            // FLOATING APPBAR SECTION (UPDATED)
+            // ----------------------------------------------------------
             appBar: showAppBar
                 ? PreferredSize(
                     preferredSize: const Size.fromHeight(50),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25),
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25),
-                      ),
-                      child: AppBar(
-                        elevation: 3,
-                        backgroundColor: isDark
-                            ? const Color(0xFF1F1B18)
-                            : const Color.fromARGB(255, 230, 218, 198),
-                        surfaceTintColor: Colors.transparent,
-                        title: Text(
-                          menuController.selectedMenu,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            letterSpacing: 0.8,
-                            color: isDark
-                                ? const Color(0xFFF5E6C8)
-                                : const Color(0xFF3B2E1A),
+                    child: SafeArea(
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(top: 5, left: 6, right: 6),
+                        child: Material(
+                          elevation: 8,
+                          shadowColor: Colors.black26,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: AppBar(
+                              elevation: 0,
+                              backgroundColor: isDark
+                                  ? const Color(0xFF1F1B18)
+                                  : const Color(0xFFE6DAC6),
+                              surfaceTintColor: Colors.transparent,
+                              title: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  menuController.selectedMenu,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 22,
+                                    letterSpacing: 0.8,
+                                    color: isDark
+                                        ? const Color(0xFFF5E6C8)
+                                        : const Color(0xFF3B2E1A),
+                                  ),
+                                ),
+                              ),
+                              leading: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: IconButton(
+                                  icon: Icon(Icons.menu_rounded,
+                                      color: isDark
+                                          ? const Color(0xFFE29B4B)
+                                          : const Color(0xFFB87333)),
+                                  onPressed: menuController.controlMenu,
+                                  tooltip: 'home_screen.menu'.tr(),
+                                ),
+                              ),
+                              actions: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 16, top: 8, bottom: 8),
+                                  child: ProfileMenu(
+                                    iconColor: isDark
+                                        ? const Color(0xFFE29B4B)
+                                        : const Color(0xFFB87333),
+                                    themeNotifier: widget.themeNotifier,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        leading: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: IconButton(
-                            icon: Icon(Icons.menu_rounded,
-                                color: isDark
-                                    ? const Color(0xFFE29B4B)
-                                    : const Color(0xFFB87333)),
-                            onPressed: menuController.controlMenu,
-                            tooltip: 'Menu',
-                          ),
-                        ),
-                        actions: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                right: 16, top: 8, bottom: 8),
-                            child: ProfileMenu(
-                                iconColor: isDark
-                                    ? const Color(0xFFE29B4B)
-                                    : const Color(0xFFB87333),
-                                themeNotifier: widget.themeNotifier),
-                          ),
-                        ],
                       ),
                     ),
                   )
                 : null,
+            // ----------------------------------------------------------
+
             backgroundColor: Colors.transparent,
             body: ScreenWrapper(
-              // Default uses global gradient; no backgroundColor override so gradient remains visible
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 switchInCurve: Curves.easeInOut,

@@ -21,128 +21,138 @@ class ProfileMenu extends StatelessWidget {
     // Listen to controller so avatar updates when image changes
     final menuController = Provider.of<MenuAppController>(context);
 
-    return PopupMenuButton<int>(
-      // Circle avatar as popup icon (updates when profile image changes)
-      icon: CircleAvatar(
-        radius: 18,
-        backgroundImage: menuController.profileImageProvider,
-        backgroundColor: isDark
-            ? Colors.grey[800]
-            : const Color.fromARGB(255, 238, 238, 238),
-      ),
+    return Center(
+      child: PopupMenuButton<int>(
+        padding: EdgeInsets.zero, // ensures perfect centering
+        offset: const Offset(0, 48),
 
-      offset: const Offset(0, 45),
+        // Circle avatar as popup icon (updates when profile image changes)
+        icon: CircleAvatar(
+          radius: 24, // 🔥 bigger icon size
+          backgroundColor: isDark
+              ? Colors.grey[800]
+              : const Color.fromARGB(255, 238, 238, 238),
 
-      // 🎨 Popup background color
-      color: isDark
-          ? const Color(0xFF3A3A3A) // soft dark grey for dark mode
-          : const Color.fromARGB(
-              255, 255, 236, 184), // golden yellow for light mode
+          // 🔥 Your required line (kept exactly)
+          backgroundImage: menuController.profileImageProvider,
 
-      // ✨ Popup shape & border styling
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: isDark
-              ? Colors.white24
-              : const Color(0xFFB87333).withOpacity(0.4), // bronze tint border
-          width: 1.2,
+          // Fallback icon when no profile image is available
+          child: null,
         ),
-      ),
 
-      onSelected: (value) {
-        switch (value) {
-          case 0: // Profile
-            menuController.updateMenu("Profile");
-            break;
-          case 1: // Settings
-            menuController.updateMenu("Settings");
-            break;
-          case 2: // Toggle theme
-            themeNotifier.value = themeNotifier.value == ThemeMode.light
-                ? ThemeMode.dark
-                : ThemeMode.light;
-            break;
-          case 3: // Logout
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-              (route) => false,
-            );
-            break;
-        }
-      },
+        // 🎨 Popup background color
+        color: isDark
+            ? const Color(0xFF2A2A2A) // Deep elegant dark surface
+            : const Color(0xFFFFF8E7), // Matches your light theme surface
 
-      itemBuilder: (context) => [
-        PopupMenuItem<int>(
-          value: 0,
-          child: Row(
-            children: [
-              Icon(Icons.person,
-                  size: 20, color: isDark ? Colors.white70 : Colors.black87),
-              const SizedBox(width: 10),
-              Text(
-                "Profile",
-                style: TextStyle(
-                    color: isDark ? Colors.white70 : Colors.black87,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
+        // ✨ Popup shape & border styling
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(
+            color: isDark
+                ? Colors.white24
+                : const Color.fromARGB(255, 255, 197, 144).withOpacity(0.4),
+            width: 1.2,
           ),
         ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: Row(
-            children: [
-              Icon(Icons.settings,
-                  size: 20, color: isDark ? Colors.white70 : Colors.black87),
-              const SizedBox(width: 10),
-              Text(
-                "Settings",
-                style: TextStyle(
-                    color: isDark ? Colors.white70 : Colors.black87,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 2,
-          child: Row(
-            children: [
-              Icon(
-                themeNotifier.value == ThemeMode.light
-                    ? Icons.dark_mode
-                    : Icons.light_mode,
-                size: 20,
-                color: isDark ? Colors.white70 : Colors.black87,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                themeNotifier.value == ThemeMode.light
-                    ? "Dark Mode"
-                    : "Light Mode",
-                style: TextStyle(
-                    color: isDark ? Colors.white70 : Colors.black87,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem<int>(
-          value: 3,
-          child: Row(
-            children: const [
-              Icon(Icons.logout, size: 20, color: Colors.redAccent),
-              SizedBox(width: 10),
-              Text("Logout",
+
+        onSelected: (value) {
+          switch (value) {
+            case 0:
+              menuController.updateMenu("Profile");
+              break;
+
+            case 1:
+              menuController.updateMenu("Settings");
+              break;
+
+            case 2:
+              themeNotifier.value = themeNotifier.value == ThemeMode.light
+                  ? ThemeMode.dark
+                  : ThemeMode.light;
+              break;
+
+            case 3:
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
+              );
+              break;
+          }
+        },
+
+        itemBuilder: (context) => [
+          PopupMenuItem<int>(
+            value: 0,
+            child: Row(
+              children: [
+                Icon(Icons.person,
+                    size: 20, color: isDark ? Colors.white70 : Colors.black87),
+                const SizedBox(width: 10),
+                Text(
+                  "Profile",
                   style: TextStyle(
-                      color: Colors.redAccent, fontWeight: FontWeight.w600)),
-            ],
+                      color: isDark ? Colors.white70 : Colors.black87,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          PopupMenuItem<int>(
+            value: 1,
+            child: Row(
+              children: [
+                Icon(Icons.settings,
+                    size: 20, color: isDark ? Colors.white70 : Colors.black87),
+                const SizedBox(width: 10),
+                Text(
+                  "Settings",
+                  style: TextStyle(
+                      color: isDark ? Colors.white70 : Colors.black87,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ),
+          PopupMenuItem<int>(
+            value: 2,
+            child: Row(
+              children: [
+                Icon(
+                  themeNotifier.value == ThemeMode.light
+                      ? Icons.dark_mode
+                      : Icons.light_mode,
+                  size: 20,
+                  color: isDark ? Colors.white70 : Colors.black87,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  themeNotifier.value == ThemeMode.light
+                      ? "Dark Mode"
+                      : "Light Mode",
+                  style: TextStyle(
+                      color: isDark ? Colors.white70 : Colors.black87,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ),
+          const PopupMenuDivider(),
+          PopupMenuItem<int>(
+            value: 3,
+            child: Row(
+              children: const [
+                Icon(Icons.logout, size: 20, color: Colors.redAccent),
+                SizedBox(width: 10),
+                Text("Logout",
+                    style: TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.w600)),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

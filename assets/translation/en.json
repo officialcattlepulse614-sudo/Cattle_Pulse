@@ -1,0 +1,89 @@
+{
+  "login_screen": {
+    "tagline": "Every Healthy Pulse Matters",
+    "username": "Username",
+    "password": "Password",
+    "forgot_password": "Forgot Password?",
+    "login": "Login"
+  },
+
+  "home_screen": {
+    "press_back_again": "Press back again to confirm exit",
+    "exit_app_title": "Exit App",
+    "exit_app_message": "Do you want to exit the app?\n(Logout feature will be added later)",
+    "cancel": "Cancel",
+    "exit": "Exit",
+    "menu": "Menu",
+    "Dashboard": "Dashboard"
+  },
+
+  "side_menu": {
+    "cattle_pulse": "Cattle Pulse",
+    "management_system": "Management System",
+    "dashboard": "Dashboard",
+    "cattle_health": "Cattle Health",
+    "temperature_monitor": "Temperature Monitor",
+    "diagnosis_treatment": "Diagnosis & Treatment",
+    "vaccination_records": "Vaccination & Records",
+    "cattle_feeding": "Cattle Feeding",
+    "feeding_schedule": "Feeding Schedule",
+    "auto_feeder": "Auto Feeder",
+    "inventory": "Inventory",
+    "geo_fencing": "Geo fencing",
+    "reports": "Reports",
+    "settings": "Settings",
+    "theme_mode": "Theme Mode"
+  },
+
+  "diagnosis_treatment_screen":{
+    "farm_health_guide":"Farm Health Guide",
+    "symptoms":"Symptoms",
+    "farm_treatment_plan":"Farm Treatment Plan",
+    "prevention_biosecurity": "Prevention & Biosecurity",
+    "all":"All",
+    "search_disease_symptom":"Search Disease or Symptoms..",
+   "mastitis": {
+      "name": "Mastitis",
+      "short": "Udder infection — common after calving",
+      "symptoms": "Swollen/hot udder, abnormal milk, fever, reduced yield",
+      "treatmentAtFarm": "Clean udder, frequent milking, apply warm compresses, consult vet for antibiotics.",
+      "precautions": "Maintain clean housing, proper milking hygiene, isolate affected animals."
+    },
+    "fmd": {
+      "name": "Foot-and-Mouth Disease (FMD)",
+      "short": "Highly contagious viral disease",
+      "symptoms": "Fever, blisters on mouth/feet/teats, salivation, lameness, sudden drop in milk",
+      "treatmentAtFarm": "Isolate affected animals, supportive care (fluids, soft food), strict biosecurity.",
+      "precautions": "Control movement, disinfect pens, report to local animal health authorities."
+    },
+    "bloat": {
+      "name": "Bloat (Ruminal tympany)",
+      "short": "Gas accumulation in rumen — can be life threatening",
+      "symptoms": "Swelling on left flank, discomfort, difficulty breathing",
+      "treatmentAtFarm": "Move animal to stand, pass an ororuminal tube if trained, give anti-foaming agents (poloxalene).",
+      "precautions": "Avoid sudden diet changes, limit access to lush legumes, feed slowly."
+    },
+    "lsd": {
+      "name": "Lumpy Skin Disease (LSD)",
+      "short": "Viral disease causing skin nodules",
+      "symptoms": "Skin lumps, fever, decreased appetite, decreased milk, sometimes eye/nasal discharge",
+      "treatmentAtFarm": "Supportive care, isolate affected animals, control insect vectors, contact vet for specific care.",
+      "precautions": "Vector control, vaccination where available, isolate and report outbreaks."
+    },
+    "parasitic": {
+      "name": "Parasitic Infestation (Ticks / Internal worms)",
+      "short": "External and internal parasites affecting general health",
+      "symptoms": "Poor condition, anemia, itching (ticks), diarrhoea/weight loss (worms)",
+      "treatmentAtFarm": "Regular deworming schedule, topical tick control, maintain clean environment.",
+      "precautions": "Follow recommended deworming programs, pasture rotation, tick control measures."
+    },
+    "brucellosis": {
+      "name": "Brucellosis",
+      "short": "Bacterial disease affecting reproduction",
+      "symptoms": "Abortions, retained placenta, reduced fertility",
+      "treatmentAtFarm": "Not treatable on farm; infected animals often need veterinary assessment and herd testing.",
+      "precautions": "Practice safe handling, test-and-slaughter policies may apply, maintain biosecurity."
+    } 
+
+  }
+}

@@ -2,9 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/notification_screen.dart';
+import 'package:cattle_pulse/screens/menu_screens/settings_screen/theme_appearance.dart';
+import 'package:cattle_pulse/screens/menu_screens/settings_screen/language_screen.dart';
+import 'package:cattle_pulse/screens/menu_screens/settings_screen/help_support.dart';
 import 'package:cattle_pulse/screens/menu_screens/settings_screen/about_app_screen.dart';
 import 'package:cattle_pulse/screens/menu_screens/settings_screen/privacy_security_screen.dart';
+import 'package:cattle_pulse/screens/menu_screens/settings_screen/notification_screen/notification_screen.dart';
+import 'package:cattle_pulse/screens/menu_screens/settings_screen/notification_screen/notification_provider.dart';
 import 'package:cattle_pulse/widgets/screen_wrapper.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -15,8 +19,6 @@ class SettingsScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final bool isDark = theme.brightness == Brightness.dark;
 
-    // Make system bars transparent so the global gradient is visible under them,
-    // but set icon brightness according to theme for readability.
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       systemNavigationBarColor: Colors.transparent,
@@ -25,93 +27,128 @@ class SettingsScreen extends StatelessWidget {
           isDark ? Brightness.light : Brightness.dark,
     ));
 
-    // Use ChangeNotifierProvider for the notification settings
-    return ChangeNotifierProvider(
-      create: (_) => NotificationSettings(),
-      child: Builder(builder: (context) {
-        return Scaffold(
-          // Let ScreenWrapper paint the gradient behind the whole screen.
-          backgroundColor: Colors.transparent,
-          body: ScreenWrapper(
-            // Default: show global gradient. If you prefer a solid color for Settings,
-            // pass backgroundColor: isDark ? Color(...) : Color(...)
-            child: Consumer<NotificationSettings>(
-              builder: (context, ns, _) {
-                if (!ns.initialized) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: ScreenWrapper(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 5),
 
-                return SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 20),
-
-                      // Notification Settings
-                      _buildCenteredCardTile(
-                        context,
-                        icon: Icons.notifications_active_outlined,
-                        title: "Notification Settings",
-                        subtitle: "Manage how you get alerts and updates",
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const NotificationScreen()),
-                          );
-                        },
-                        isDark: isDark,
+              // Notification Settings
+              _buildCenteredCardTile(
+                context,
+                icon: Icons.notifications_active_outlined,
+                title: "Notification Settings",
+                subtitle: "Manage how you get alerts and updates",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ChangeNotifierProvider(
+                        create: (_) => NotificationSettings(),
+                        child: NotificationScreen(),
                       ),
+                    ),
+                  );
+                },
+                isDark: isDark,
+              ),
 
-                      const SizedBox(height: 25),
+              const SizedBox(height: 25),
 
-                      // Privacy & Security
-                      _buildCenteredCardTile(
-                        context,
-                        icon: Icons.lock_outline,
-                        title: "Privacy & Security",
-                        subtitle:
-                            "Control data, permissions, and privacy policies",
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const PrivacySecurityScreen()),
-                          );
-                        },
-                        isDark: isDark,
-                      ),
+              // Theme / Appearance
+              _buildCenteredCardTile(
+                context,
+                icon: Icons.color_lens_outlined,
+                title: "Theme / Appearance",
+                subtitle: "Change Theme & Manage fonts",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ThemeAppearance()),
+                  );
+                },
+                isDark: isDark,
+              ),
 
-                      const SizedBox(height: 25),
+              const SizedBox(height: 25),
 
-                      // About App
-                      _buildCenteredCardTile(
-                        context,
-                        icon: Icons.info_outline,
-                        title: "About App",
-                        subtitle: "Learn about Cattle Pulse features",
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const AboutAppScreen()),
-                          );
-                        },
-                        isDark: isDark,
-                      ),
+              // Language
+              _buildCenteredCardTile(
+                context,
+                icon: Icons.language_outlined,
+                title: "Language",
+                subtitle: "Select your preferred language",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LanguageScreen()),
+                  );
+                },
+                isDark: isDark,
+              ),
 
-                      const SizedBox(height: 40),
-                      _buildFooterNote(isDark),
-                    ],
-                  ),
-                );
-              },
-            ),
+              const SizedBox(height: 25),
+
+              // Privacy & Security
+              _buildCenteredCardTile(
+                context,
+                icon: Icons.lock_outline,
+                title: "Privacy & Security",
+                subtitle: "Control data, permissions, and privacy policies",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const PrivacySecurityScreen()),
+                  );
+                },
+                isDark: isDark,
+              ),
+
+              const SizedBox(height: 25),
+
+              // Help & Support
+              _buildCenteredCardTile(
+                context,
+                icon: Icons.help_outline,
+                title: "Help & Support",
+                subtitle: "Get assistance and read FAQs",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => HelpSupportScreen()),
+                  );
+                },
+                isDark: isDark,
+              ),
+
+              const SizedBox(height: 25),
+
+              // About App
+              _buildCenteredCardTile(
+                context,
+                icon: Icons.info_outline,
+                title: "About App",
+                subtitle: "Learn about Cattle Pulse features",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AboutAppScreen()),
+                  );
+                },
+                isDark: isDark,
+              ),
+
+              const SizedBox(height: 40),
+              _buildFooterNote(isDark),
+            ],
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 
@@ -128,7 +165,9 @@ class SettingsScreen extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width * 0.88,
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          color: isDark
+              ? const Color(0xFF1E1E1E)
+              : const Color.fromARGB(255, 248, 234, 220),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(

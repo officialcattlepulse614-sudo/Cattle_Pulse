@@ -1,6 +1,8 @@
+// lib/screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:cattle_pulse/screens/main/home_screen.dart';
-import 'package:cattle_pulse/main.dart'; // ✅ For themeNotifier
+import 'package:cattle_pulse/main.dart'; // themeNotifier
+import 'package:easy_localization/easy_localization.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -22,36 +24,34 @@ class LoginScreen extends StatelessWidget {
         child: Center(
           child: SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 400, // 👌 Makes login box perfect on web
-              ),
+              constraints: const BoxConstraints(maxWidth: 400),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // 🐮 Logo
                     Image.asset(
                       'assets/images/cp2.png',
                       height: 100,
                     ),
                     const SizedBox(height: 16),
 
-                    // 🌿 Tagline
-                    const Text(
-                      "Every Healthy Pulse Matters",
-                      style: TextStyle(
+                    // ✅ Multi-language Tagline
+                    Text(
+                      'login_screen.tagline'.tr(),
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.white70,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
 
-                    // 👤 Username Field
+                    // ✅ Username
                     TextField(
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: "Username",
+                        labelText: 'login_screen.username'.tr(),
                         labelStyle: const TextStyle(color: Colors.white70),
                         filled: true,
                         fillColor: const Color(0xFF1A1A1A),
@@ -67,12 +67,12 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // 🔒 Password Field
+                    // ✅ Password
                     TextField(
                       obscureText: true,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        labelText: "Password",
+                        labelText: 'login_screen.password'.tr(),
                         labelStyle: const TextStyle(color: Colors.white70),
                         filled: true,
                         fillColor: const Color(0xFF1A1A1A),
@@ -88,19 +88,20 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
 
+                    // ✅ Forgot Password
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {},
-                        child: const Text(
-                          "Forgot Password?",
-                          style: TextStyle(color: Colors.white70),
+                        child: Text(
+                          'login_screen.forgot_password'.tr(),
+                          style: const TextStyle(color: Colors.white70),
                         ),
                       ),
                     ),
                     const SizedBox(height: 25),
 
-                    // 🔘 Login Button
+                    // ✅ Login Button
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -119,7 +120,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const Text("Login"),
+                      child: Text('login_screen.login'.tr()),
                     ),
                   ],
                 ),

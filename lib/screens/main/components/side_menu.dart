@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -58,11 +59,11 @@ class SideMenu extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Cattle Pulse',
+                          Text('side_menu.cattle_pulse'.tr(),
                               style: theme.textTheme.titleMedium
                                   ?.copyWith(fontWeight: FontWeight.w700)),
                           const SizedBox(height: 4),
-                          Text('Management System',
+                          Text('side_menu.management_system'.tr(),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurface
                                     .withOpacity(0.85),
@@ -79,33 +80,33 @@ class SideMenu extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   children: [
-                    const _DrawerSectionTitle(label: 'Main'),
+                    _DrawerSectionTitle(label: 'Main'),
                     DrawerListTile(
-                      title: 'Dashboard',
+                      title: 'side_menu.dashboard'.tr(),
                       icon: LucideIcons.layoutDashboard,
                       press: () => menuController.selectMenu('Dashboard'),
                       menuController: menuController,
                     ),
                     _ExpandableDrawerTile(
-                      title: 'Cattle Health',
+                      title: 'side_menu.cattle_health'.tr(),
                       icon: LucideIcons.heartPulse,
                       children: [
                         _DrawerSubItem(
-                          title: 'Temperature Monitor',
+                          title: 'side_menu.temperature_monitor'.tr(),
                           icon: LucideIcons.thermometer,
                           onTap: () =>
                               menuController.selectMenu('Temperature Monitor'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'Diagnosis & Treatment',
+                          title: 'side_menu.diagnosis_treatment'.tr(),
                           icon: LucideIcons.stethoscope,
                           onTap: () => menuController
                               .selectMenu('Diagnosis & Treatment'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'Vaccination & Records',
+                          title: 'side_menu.vaccination_records'.tr(),
                           icon: LucideIcons.clipboardList,
                           onTap: () => menuController
                               .selectMenu('Vaccination & Records'),
@@ -114,24 +115,24 @@ class SideMenu extends StatelessWidget {
                       ],
                     ),
                     _ExpandableDrawerTile(
-                      title: 'Cattle Feeding',
+                      title: 'side_menu.cattle_feeding'.tr(),
                       icon: LucideIcons.wheat,
                       children: [
                         _DrawerSubItem(
-                          title: 'Feeding Schedule',
+                          title: 'side_menu.feeding_schedule'.tr(),
                           icon: LucideIcons.calendarClock,
                           onTap: () =>
                               menuController.selectMenu('Feeding Schedule'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'Auto Feeder',
+                          title: 'side_menu.auto_feeder'.tr(),
                           icon: LucideIcons.refreshCw,
                           onTap: () => menuController.selectMenu('Auto Feeder'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'Inventory',
+                          title: 'side_menu.inventory'.tr(),
                           icon: LucideIcons.package,
                           onTap: () => menuController.selectMenu('Inventory'),
                           menuController: menuController,
@@ -139,20 +140,20 @@ class SideMenu extends StatelessWidget {
                       ],
                     ),
                     DrawerListTile(
-                      title: 'Geo Fencing',
+                      title: 'side_menu.geo_fencing'.tr(),
                       icon: LucideIcons.mapPin,
                       press: () => menuController.selectMenu('Geo Fencing'),
                       menuController: menuController,
                     ),
                     DrawerListTile(
-                      title: 'Reports',
+                      title: 'side_menu.reports'.tr(),
                       icon: LucideIcons.fileBarChart,
                       press: () => menuController.selectMenu('Reports'),
                       menuController: menuController,
                     ),
                     const SizedBox(height: 6),
                     DrawerListTile(
-                      title: 'Settings',
+                      title: 'side_menu.settings'.tr(),
                       icon: LucideIcons.settings,
                       press: () => menuController.selectMenu('Settings'),
                       menuController: menuController,
@@ -188,7 +189,7 @@ class SideMenu extends StatelessWidget {
                           leading: Icon(
                               isDarkMode ? LucideIcons.moon : LucideIcons.sun,
                               color: activeColor),
-                          title: Text('Theme Mode',
+                          title: Text('side_menu.theme_mode'.tr(),
                               style: theme.textTheme.bodyLarge
                                   ?.copyWith(fontWeight: FontWeight.w600)),
                           trailing: Switch(
