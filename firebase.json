@@ -1,8 +1,1 @@
-{
-  "firestore": {
-    "database": "(default)",
-    "location": "asia-south1",
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  }
-}
+{"firestore":{"database":"(default)","location":"asia-south1","rules":"firestore.rules","indexes":"firestore.indexes.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"cattle-pulse","appId":"1:987705557812:android:6e1985d303d394b3d0db61","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"cattle-pulse","configurations":{"android":"1:987705557812:android:6e1985d303d394b3d0db61","ios":"1:987705557812:ios:52191385cdad2599d0db61","macos":"1:987705557812:ios:52191385cdad2599d0db61","web":"1:987705557812:web:2e00ad29a57f9dd6d0db61","windows":"1:987705557812:web:4cf95ca0adeaf474d0db61"}}}}}}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "987705557812",
+    "project_id": "cattle-pulse",
+    "storage_bucket": "cattle-pulse.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987705557812:android:6e1985d303d394b3d0db61",
+        "android_client_info": {
+          "package_name": "com.example.cattle_pulse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_ke4B87hnoBMt9ze2P4Q82i1onX3eZzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
