@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/theme_appearance.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/language_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/help_support.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/about_app_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/privacy_security_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/notification_screen/notification_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/notification_screen/notification_provider.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/theme_appearance.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/language_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/help_support.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/about_app_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/privacy_security_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/notification_screen/notification_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/notification_screen/notification_provider.dart';
 import 'package:cattle_pulse/widgets/screen_wrapper.dart';
 
 class SettingsScreen extends StatelessWidget {

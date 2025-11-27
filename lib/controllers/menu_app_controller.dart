@@ -7,31 +7,36 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // -------------------------------
-// Menu Screens (Dashboard & Core)
+// Side Menu Home Screen
 // -------------------------------
-import 'package:cattle_pulse/screens/menu_screens/dashboard_screen/dashboard_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/geofencing_screen/geofencing_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/home_screen/dashboard_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/cattle_management_screen.dart';
+
+// -------------------------------
+// Geo Fencing
+// -------------------------------
+import 'package:cattle_pulse/screens/side_menu_screens/geofencing_screen/geofencing_screen.dart';
 
 // -------------------------------
 // Cattle Health
 // -------------------------------
-import 'package:cattle_pulse/screens/menu_screens/cattle_health/diagnosis_treatment_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/cattle_health/temperature_monitor_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/cattle_health/vaccination_records_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/cattle_health/diagnosis_treatment_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/cattle_health/temperature_monitor_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/cattle_health/vaccination_records_screen.dart';
 
 // -------------------------------
 // Cattle Feeding
 // -------------------------------
-import 'package:cattle_pulse/screens/menu_screens/cattle_feeding/feeding_schedule_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/cattle_feeding/autofeeder_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/cattle_feeding/inventory_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/cattle_feeding/feeding_schedule_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/cattle_feeding/autofeeder/ui.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/cattle_feeding/inventory_screen.dart';
 
 // -------------------------------
 // Reports / Settings / Profile
 // -------------------------------
-import 'package:cattle_pulse/screens/menu_screens/reports_screen/reports_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/settings_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/profile_screen/profile_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/reports_screen/reports_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/settings_screen.dart';
+import 'package:cattle_pulse/screens/profile_screen/profile_screen.dart';
 
 class MenuAppController extends ChangeNotifier {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -94,6 +99,9 @@ class MenuAppController extends ChangeNotifier {
     switch (matched) {
       case "Dashboard":
         _currentScreen = const DashboardScreen();
+        break;
+      case "Cattle Management":
+        _currentScreen = const CattleManagementScreen();
         break;
       case "Profile":
         _currentScreen = const ProfileScreen();
@@ -236,7 +244,9 @@ class MenuAppController extends ChangeNotifier {
   // Helpers / other code
   // ------------------------
   final List<String> _menuLabels = [
+    'Home Screen',
     'Dashboard',
+    'Cattle Management',
     'Profile',
     'Cattle Health',
     'Temperature Monitor',
@@ -252,6 +262,10 @@ class MenuAppController extends ChangeNotifier {
   ];
 
   final Map<String, List<String>> _groupChildren = {
+    'Home Screen': [
+      'Dashboard',
+      'Cattle Management',
+    ],
     'Cattle Health': [
       'Temperature Monitor',
       'Diagnosis & Treatment',

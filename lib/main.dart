@@ -1,6 +1,7 @@
+//main.dart
 import 'package:cattle_pulse/screens/splash/splash_screen.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/notification_screen/notification_provider.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/notification_screen/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

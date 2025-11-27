@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -16,7 +15,6 @@ class SideMenu extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final bool isDark = theme.brightness == Brightness.dark;
 
-    // Background gradient
     final Gradient backgroundGradient = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -26,7 +24,7 @@ class SideMenu extends StatelessWidget {
     );
 
     return Drawer(
-      width: size.width < 700 ? 260 : 320,
+      width: size.width < 900 ? 245 : 320,
       child: Container(
         decoration: BoxDecoration(
           gradient: backgroundGradient,
@@ -59,11 +57,11 @@ class SideMenu extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('side_menu.cattle_pulse'.tr(),
+                          Text('Cattle Pulse',
                               style: theme.textTheme.titleMedium
                                   ?.copyWith(fontWeight: FontWeight.w700)),
                           const SizedBox(height: 4),
-                          Text('side_menu.management_system'.tr(),
+                          Text('Management System',
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurface
                                     .withOpacity(0.85),
@@ -80,33 +78,46 @@ class SideMenu extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   children: [
-                    _DrawerSectionTitle(label: 'Main'),
-                    DrawerListTile(
-                      title: 'side_menu.dashboard'.tr(),
-                      icon: LucideIcons.layoutDashboard,
-                      press: () => menuController.selectMenu('Dashboard'),
-                      menuController: menuController,
+                    const _DrawerSectionTitle(label: 'Main'),
+                    _ExpandableDrawerTile(
+                      title: 'Home',
+                      icon: LucideIcons.home,
+                      children: [
+                        _DrawerSubItem(
+                          title: 'Dashboard',
+                          icon: LucideIcons.layoutDashboard,
+                          onTap: () => menuController.selectMenu('Dashboard'),
+                          menuController: menuController,
+                        ),
+                        _DrawerSubItem(
+                          title: 'Cattle Management',
+                          icon: LucideIcons.clipboardList,
+                          onTap: () =>
+                              menuController.selectMenu('Cattle Management'),
+                          menuController: menuController,
+                        ),
+                      ],
                     ),
                     _ExpandableDrawerTile(
-                      title: 'side_menu.cattle_health'.tr(),
+                      title: 'Cattle Health',
                       icon: LucideIcons.heartPulse,
                       children: [
                         _DrawerSubItem(
-                          title: 'side_menu.temperature_monitor'.tr(),
+                          title: 'Temperature Monitor',
                           icon: LucideIcons.thermometer,
                           onTap: () =>
                               menuController.selectMenu('Temperature Monitor'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'side_menu.diagnosis_treatment'.tr(),
+                          title: 'Diagnosis & Treatment',
                           icon: LucideIcons.stethoscope,
                           onTap: () => menuController
                               .selectMenu('Diagnosis & Treatment'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'side_menu.vaccination_records'.tr(),
+                          title: 'Vaccination & Records',
                           icon: LucideIcons.clipboardList,
                           onTap: () => menuController
                               .selectMenu('Vaccination & Records'),
@@ -115,24 +126,24 @@ class SideMenu extends StatelessWidget {
                       ],
                     ),
                     _ExpandableDrawerTile(
-                      title: 'side_menu.cattle_feeding'.tr(),
+                      title: 'Cattle Feeding',
                       icon: LucideIcons.wheat,
                       children: [
                         _DrawerSubItem(
-                          title: 'side_menu.feeding_schedule'.tr(),
+                          title: 'Feeding Schedule',
                           icon: LucideIcons.calendarClock,
                           onTap: () =>
                               menuController.selectMenu('Feeding Schedule'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'side_menu.auto_feeder'.tr(),
+                          title: 'Auto Feeder',
                           icon: LucideIcons.refreshCw,
                           onTap: () => menuController.selectMenu('Auto Feeder'),
                           menuController: menuController,
                         ),
                         _DrawerSubItem(
-                          title: 'side_menu.inventory'.tr(),
+                          title: 'Inventory',
                           icon: LucideIcons.package,
                           onTap: () => menuController.selectMenu('Inventory'),
                           menuController: menuController,
@@ -140,20 +151,20 @@ class SideMenu extends StatelessWidget {
                       ],
                     ),
                     DrawerListTile(
-                      title: 'side_menu.geo_fencing'.tr(),
+                      title: 'Geo Fencing',
                       icon: LucideIcons.mapPin,
                       press: () => menuController.selectMenu('Geo Fencing'),
                       menuController: menuController,
                     ),
                     DrawerListTile(
-                      title: 'side_menu.reports'.tr(),
+                      title: 'Reports',
                       icon: LucideIcons.fileBarChart,
                       press: () => menuController.selectMenu('Reports'),
                       menuController: menuController,
                     ),
                     const SizedBox(height: 6),
                     DrawerListTile(
-                      title: 'side_menu.settings'.tr(),
+                      title: 'Settings',
                       icon: LucideIcons.settings,
                       press: () => menuController.selectMenu('Settings'),
                       menuController: menuController,
@@ -189,7 +200,7 @@ class SideMenu extends StatelessWidget {
                           leading: Icon(
                               isDarkMode ? LucideIcons.moon : LucideIcons.sun,
                               color: activeColor),
-                          title: Text('side_menu.theme_mode'.tr(),
+                          title: Text('Theme Mode',
                               style: theme.textTheme.bodyLarge
                                   ?.copyWith(fontWeight: FontWeight.w600)),
                           trailing: Switch(
@@ -216,7 +227,6 @@ class SideMenu extends StatelessWidget {
   }
 }
 
-// Section Title
 class _DrawerSectionTitle extends StatelessWidget {
   const _DrawerSectionTitle({Key? key, required this.label}) : super(key: key);
   final String label;
@@ -233,7 +243,6 @@ class _DrawerSectionTitle extends StatelessWidget {
   }
 }
 
-// Main Drawer Tile
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     Key? key,
@@ -260,7 +269,6 @@ class DrawerListTile extends StatelessWidget {
       builder: (context, _) {
         final isSelected = _isSelected();
 
-        // Better contrast selection background
         final BoxDecoration selectedDecoration = BoxDecoration(
           color: isDark
               ? theme.colorScheme.primary.withOpacity(0.18)
@@ -336,7 +344,6 @@ class DrawerListTile extends StatelessWidget {
   }
 }
 
-// Expandable Groups
 class _ExpandableDrawerTile extends StatefulWidget {
   const _ExpandableDrawerTile(
       {Key? key,
@@ -402,7 +409,6 @@ class _ExpandableDrawerTileState extends State<_ExpandableDrawerTile> {
   }
 }
 
-// Sub Items
 class _DrawerSubItem extends StatelessWidget {
   const _DrawerSubItem(
       {Key? key,

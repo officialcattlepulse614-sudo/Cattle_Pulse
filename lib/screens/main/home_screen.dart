@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
 import 'package:cattle_pulse/screens/main/components/side_menu.dart';
-import 'package:cattle_pulse/screens/menu_screens/profile_screen/profile_menu.dart';
+import 'package:cattle_pulse/screens/profile_screen/profile_menu.dart';
 import 'package:cattle_pulse/widgets/screen_wrapper.dart';
 import 'package:easy_localization/easy_localization.dart';
 

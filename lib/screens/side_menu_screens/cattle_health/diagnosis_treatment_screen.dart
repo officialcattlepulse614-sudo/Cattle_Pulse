@@ -233,25 +233,6 @@ class _DiagnosisTreatmentScreenState extends State<DiagnosisTreatmentScreen>
           ),
           filled: true,
           fillColor: isDark ? const Color(0xFF2A2521) : const Color(0xFFFFF8F0),
-          // border: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(12),
-          //   borderSide: BorderSide(
-          //     color: isDark ? const Color(0xFF3D3530) : const Color(0xFFE6DAC6),
-          //   ),
-          // ),
-          // enabledBorder: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(12),
-          //   borderSide: BorderSide(
-          //     color: isDark ? const Color(0xFF3D3530) : const Color(0xFFE6DAC6),
-          //   ),
-          // ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(12),
-          //   borderSide: BorderSide(
-          //     color: isDark ? const Color(0xFFE29B4B) : const Color(0xFFB87333),
-          //     width: 2,
-          //   ),
-          // ),
         ),
       ),
     );

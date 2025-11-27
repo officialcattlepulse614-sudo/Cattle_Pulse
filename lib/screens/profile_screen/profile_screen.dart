@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
 import 'package:cattle_pulse/screens/auth/login_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/profile_screen/edit_profile.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/privacy_security_screen.dart';
-import 'package:cattle_pulse/screens/menu_screens/settings_screen/about_app_screen.dart';
+import 'package:cattle_pulse/screens/profile_screen/edit_profile.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/privacy_security_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/about_app_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
