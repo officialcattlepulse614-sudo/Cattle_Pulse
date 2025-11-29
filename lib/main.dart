@@ -1,16 +1,13 @@
-//main.dart
 import 'package:cattle_pulse/screens/splash/splash_screen.dart';
 import 'package:cattle_pulse/controllers/menu_app_controller.dart';
 import 'package:cattle_pulse/screens/side_menu_screens/settings_screen/notification_screen/notification_provider.dart';
+import 'package:cattle_pulse/controllers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
-/// Theme notifier for switching light/dark/system
-final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,18 +37,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeNotifier,
-      builder: (context, currentMode, _) {
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => MenuAppController()),
-            ChangeNotifierProvider(create: (_) => NotificationSettings()),
-          ],
-          child: MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MenuAppController()),
+        ChangeNotifierProvider(create: (_) => NotificationSettings()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) {
+          return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Cattle Pulse',
-            themeMode: currentMode,
+            themeMode: themeProvider.themeMode,
 
             /// Localization
             localizationsDelegates: context.localizationDelegates,
@@ -143,7 +140,7 @@ class MyApp extends StatelessWidget {
               ),
               elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF333333),
+                  backgroundColor: const Color(0xFF333333),
                   foregroundColor: Colors.white,
                   elevation: 3,
                   shape: const RoundedRectangleBorder(
@@ -185,11 +182,10 @@ class MyApp extends StatelessWidget {
               );
             },
 
-            /// Entry point
             home: const SplashScreen(),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

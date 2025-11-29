@@ -14,8 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    // Wait for 5 seconds, then go to Login Screen
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -25,41 +24,40 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Color(0xFF0D0D0D)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+      backgroundColor:
+          Colors.transparent, // IMPORTANT: Let main.dart gradient show through
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 🐮 Logo
+            // Logo
             Image.asset(
               'assets/images/cp2.png',
               height: 100,
             ),
             const SizedBox(height: 20),
 
-            // 🌿 Tagline
-            const Text(
+            // Tagline
+            Text(
               "Every Healthy Pulse Matters",
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.white70,
+                color: isDark
+                    ? const Color(0xFFF5E6C8) // Dark mode text color
+                    : const Color(0xFF3B2E1A), // Light mode text color
               ),
             ),
             const SizedBox(height: 40),
 
-            // ⏳ Loading Indicator
-            const CircularProgressIndicator(
-              color: Colors.white,
+            // Loading Indicator
+            CircularProgressIndicator(
+              color: isDark
+                  ? const Color(0xFFE29B4B) //Dark Mode
+                  : const Color(0xFFB87333), //Light Mode
             ),
           ],
         ),
