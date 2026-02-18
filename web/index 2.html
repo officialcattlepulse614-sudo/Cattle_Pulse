@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  
+  <!-- App Information -->
+  <meta name="description" content="Cattle Pulse - Every Healthy Pulse Matters. Advanced cattle health monitoring and management system.">
+  <meta name="keywords" content="cattle, livestock, health monitoring, farm management, cattle pulse">
+  <meta name="author" content="Cattle Pulse">
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#EAD9B0">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Cattle Pulse">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/Icon-192.png">
+
+  <!-- Favicons - Multiple sizes for better compatibility -->
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/Icon-512.png">
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="Every Healthy Pulse Matters - Advanced cattle health monitoring system">
+  <meta property="og:image" content="icons/Icon-512.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Cattle Pulse">
+  <meta property="twitter:description" content="Every Healthy Pulse Matters">
+  <meta property="twitter:image" content="icons/Icon-512.png">
+
+  <title>Cattle Pulse - Every Healthy Pulse Matters</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #FFF8E7 0%, #EAD9B0 50%, #D1B585 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(135deg, #000000 0%, #111111 50%, #0A0A0A 100%);
+      }
+      
+      .loading-text {
+        color: #F5E6C8 !important;
+      }
+      
+      .tagline {
+        color: #F5E6C8 !important;
+      }
+      
+      .spinner {
+        border-top-color: #E29B4B !important;
+      }
+    }
+
+    /* Loading Container */
+    #loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Logo Container */
+    .logo-container {
+      position: relative;
+      animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+    }
+
+    /* Loading Text */
+    .loading-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: #2E2E2E;
+      letter-spacing: -0.5px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    /* Tagline */
+    .tagline {
+      font-size: 16px;
+      font-weight: 500;
+      color: #3B2E1A;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    /* Spinner */
+    .spinner-container {
+      margin-top: 8px;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top-color: #B87333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Flutter app container */
+    #flutter-app {
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    #flutter-app.loaded {
+      display: block;
+    }
+
+    /* Hide loading when Flutter is ready */
+    body.flutter-loaded #loading-container {
+      animation: fadeOut 0.5s ease-in-out forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-container">
+    <div class="logo-container">
+      <img src="icons/Icon-192.png" alt="Cattle Pulse Logo" class="logo" onerror="this.src='favicon.png'">
+    </div>
+    <h1 class="loading-text">Cattle Pulse</h1>
+    <p class="tagline">Every Healthy Pulse Matters</p>
+    <div class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Flutter App Container -->
+  <div id="flutter-app"></div>
+
+  <script>
+    // Hide loading screen when Flutter is ready
+    window.addEventListener('flutter-first-frame', function() {
+      document.body.classList.add('flutter-loaded');
+      document.getElementById('flutter-app').classList.add('loaded');
+      setTimeout(function() {
+        var loadingContainer = document.getElementById('loading-container');
+        if (loadingContainer) {
+          loadingContainer.remove();
+        }
+      }, 500);
+    });
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>`

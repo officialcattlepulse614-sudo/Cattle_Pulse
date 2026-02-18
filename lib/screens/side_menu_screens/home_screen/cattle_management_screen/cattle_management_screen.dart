@@ -1,9 +1,10 @@
+import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/delete_cattle.dart';
 import 'package:flutter/material.dart';
 import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/cattle_model.dart';
 import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/cattle_service.dart';
 import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/cattle_profile_screen.dart';
 import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/add_cattle_screen.dart';
-import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/edit_feeding_profile_screen.dart';
+import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/edit_cattle_screen.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class CattleManagementScreen extends StatefulWidget {
@@ -523,7 +524,9 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                 "Start by adding your first animal",
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: Colors.grey[600],
+                                  color: isDark
+                                      ? const Color(0x9EF5E6C8)
+                                      : const Color(0x8D2C2416),
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -573,10 +576,8 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                   Icon(Icons.search_off_rounded,
                                       size: 80,
                                       color: isDark
-                                          ? const Color.fromARGB(
-                                              164, 226, 156, 75)
-                                          : const Color.fromARGB(
-                                              172, 184, 115, 51)),
+                                          ? const Color(0xA3E29C4B)
+                                          : const Color(0xACB87333)),
                                   const SizedBox(height: 24),
                                   Text(
                                     "No Results Found",
@@ -685,7 +686,7 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                   ? const Color(
                                                       0xFF2A2520) //Dark Mode
                                                   : const Color(
-                                                      0xFFE6DAC6), //Light Mode
+                                                      0xFFF7EDDD), //Light Mode
 
                                               borderRadius:
                                                   BorderRadius.circular(14),
@@ -739,7 +740,7 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                               ? const Color(
                                                                   0xFF2A2420)
                                                               : const Color(
-                                                                  0xFFF0EBE3),
+                                                                  0xFFF7EDDD),
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(6),
@@ -754,9 +755,9 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                               size: 14,
                                                               color: isDark
                                                                   ? const Color(
-                                                                      0xFF9C8B75)
+                                                                      0xFFE29B4B)
                                                                   : const Color(
-                                                                      0xFF6B5F51),
+                                                                      0xFFB87333),
                                                             ),
                                                             const SizedBox(
                                                                 width: 4),
@@ -772,9 +773,9 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                                           .w600,
                                                                   color: isDark
                                                                       ? const Color(
-                                                                          0xFF9C8B75)
+                                                                          0xFFF5E6C8)
                                                                       : const Color(
-                                                                          0xFF6B5F51),
+                                                                          0xFF2C2416),
                                                                 ),
                                                                 maxLines: 1,
                                                                 minFontSize: 10,
@@ -868,37 +869,11 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                           Expanded(
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                  colors: isDark
-                                                      ? [
-                                                          const Color(
-                                                              0xFFE29B4B),
-                                                          const Color(
-                                                              0xFFD67D2E)
-                                                        ]
-                                                      : [
-                                                          const Color(
-                                                              0xFFD4956F),
-                                                          const Color(
-                                                              0xFFB87333)
-                                                        ],
-                                                ),
+                                                color: isDark
+                                                    ? const Color(0xFFE29B4B)
+                                                    : const Color(0xFFD4956F),
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: (isDark
-                                                            ? const Color(
-                                                                0xFFE29B4B)
-                                                            : const Color(
-                                                                0xFFB87333))
-                                                        .withOpacity(0.3),
-                                                    blurRadius: 8,
-                                                    offset: const Offset(0, 4),
-                                                  ),
-                                                ],
+                                                    BorderRadius.circular(16),
                                               ),
                                               child: Material(
                                                 color: Colors.transparent,
@@ -920,13 +895,17 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
-                                                      children: const [
+                                                      children: [
                                                         Icon(
                                                             Icons
                                                                 .visibility_rounded,
                                                             size: 20,
-                                                            color:
-                                                                Colors.white),
+                                                            color: isDark
+                                                                ? Color(
+                                                                    0xFF784212) //Dark
+                                                                : Color(
+                                                                    0xFF814633) //Light
+                                                            ),
                                                         SizedBox(width: 8),
                                                         Text(
                                                           "View Profile",
@@ -935,8 +914,12 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600,
-                                                              color:
-                                                                  Colors.white),
+                                                              color: isDark
+                                                                  ? Color(
+                                                                      0xFF3E270F) //Dark
+                                                                  : Color(
+                                                                      0xFF401E14) //Light
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -967,7 +950,7 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            EditFeedingProfileScreen(
+                                                            EditCattleScreen(
                                                                 cattle: cow)),
                                                   );
                                                 },
@@ -984,6 +967,46 @@ class _CattleManagementScreenState extends State<CattleManagementScreen> {
                                                               0xFFE29B4B)
                                                           : const Color(
                                                               0xFFB87333)),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: isDark
+                                                  ? const Color(0xFF2A2420)
+                                                  : const Color(0xFFF0EBE3),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: isDark
+                                                    ? const Color(0xFF3D362F)
+                                                    : const Color(0xFFE8DCC8),
+                                                width: 1.5,
+                                              ),
+                                            ),
+                                            child: Material(
+                                              color: Colors.transparent,
+                                              child: InkWell(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                onTap: () async {
+                                                  await showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (_) =>
+                                                        DeleteCattleDialog(
+                                                            cattle: cow),
+                                                  );
+                                                },
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(14),
+                                                  child: Icon(
+                                                    Icons.delete_rounded,
+                                                    size: 22,
+                                                    color: Color(0xFFD32F2F),
+                                                  ),
                                                 ),
                                               ),
                                             ),

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:cattle_pulse/screens/auth/login_screen.dart';
+import 'package:cattle_pulse/screens/auth/auth_gate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,13 +13,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _navigateToAuthGate();
+  }
 
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
-    });
+  Future<void> _navigateToAuthGate() async {
+    // Show splash for 3-5 seconds
+    await Future.delayed(const Duration(seconds: 3));
+
+    if (!mounted) return;
+
+    // Navigate to AuthGate (which will handle login/home routing)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const AuthGate()),
+    );
   }
 
   @override
@@ -28,8 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          Colors.transparent, // IMPORTANT: Let main.dart gradient show through
+      backgroundColor: Colors.transparent,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,18 +52,15 @@ class _SplashScreenState extends State<SplashScreen> {
               "Every Healthy Pulse Matters",
               style: TextStyle(
                 fontSize: 16,
-                color: isDark
-                    ? const Color(0xFFF5E6C8) // Dark mode text color
-                    : const Color(0xFF3B2E1A), // Light mode text color
+                color:
+                    isDark ? const Color(0xFFF5E6C8) : const Color(0xFF3B2E1A),
               ),
             ),
             const SizedBox(height: 40),
 
             // Loading Indicator
             CircularProgressIndicator(
-              color: isDark
-                  ? const Color(0xFFE29B4B) //Dark Mode
-                  : const Color(0xFFB87333), //Light Mode
+              color: isDark ? const Color(0xFFE29B4B) : const Color(0xFFB87333),
             ),
           ],
         ),

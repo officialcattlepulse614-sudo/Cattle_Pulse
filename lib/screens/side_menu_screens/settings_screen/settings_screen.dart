@@ -94,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                 color: isDark
                                     ? const Color(0xFF1F1B18)
                                     : const Color(0xFFE6DAC6),
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
                                   color: isDark
                                       ? const Color(0xFF302518)
@@ -119,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   Text(
                                     'Customize Your App Experience',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       color: isDark
                                           ? const Color(0xFFF5E6C8)
@@ -188,7 +188,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                   _SettingsCard(
                     icon: LucideIcons.palette,
                     title: "Theme & Appearance",
-                    subtitle: "Customize colors and fonts",
+                    subtitle: "Change App Theme",
                     isDark: isDark,
                     delay: 100,
                     onTap: () {

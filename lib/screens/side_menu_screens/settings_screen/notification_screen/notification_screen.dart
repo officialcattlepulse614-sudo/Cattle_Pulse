@@ -128,8 +128,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: isDark
-                                      ? const Color(0xFF1F1B18)
-                                      : const Color.fromARGB(255, 27, 26, 23),
+                                      ? const Color(0xFF1F1B18) //Dark Mode
+                                      : const Color(0xFFE6DAC6), //Light Modes,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
                                     color: isDark
@@ -142,20 +142,20 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   Icons.campaign_rounded,
                                   size: 28,
                                   color: isDark
-                                      ? const Color(0xFFE29B4B) // Dark Mode
-                                      : const Color(0xFFB87333), // Light Mode
+                                      ? const Color(0xFFE29B4B) //Dark Mode
+                                      : const Color(0xFFB87333), //Light Mode
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              const SizedBox(width: 10),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(height: 4),
+                                    const SizedBox(height: 1),
                                     Text(
                                       'Manage alerts and updates',
                                       style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         color: isDark
                                             ? const Color(0xFFF5E6C8)

@@ -1,7 +1,7 @@
 // screens/cattle_profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:cattle_pulse/screens/side_menu_screens/home_screen/cattle_management_screen/cattle_model.dart';
-import 'edit_feeding_profile_screen.dart';
+import 'edit_cattle_screen.dart';
 
 class CattleProfileScreen extends StatelessWidget {
   final CattleModel cow;
@@ -145,7 +145,7 @@ class CattleProfileScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => EditFeedingProfileScreen(cattle: cow),
+                          builder: (_) => EditCattleScreen(cattle: cow),
                         ),
                       );
                     },
